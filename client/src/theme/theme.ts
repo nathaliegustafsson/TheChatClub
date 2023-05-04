@@ -8,19 +8,21 @@ export const theme = createTheme({
       dark: "#FFFFFF",
     },
     background: {
-      default: "#08162C",
-      paper: "#FFFFFF",
+      default: "#FFFFFF",
+      paper: "#08162C",
     },
     secondary: {
       main: "#CDDDF4",
     },
     text: {
-      secondary: "#ffffff",
+      secondary: "rgba(0, 0, 0, 0.87)",
+      primary: "#ffffff",
     },
   },
   typography: {
     button: {
       fontFamily: "Forum",
+      textTransform: "none",
     },
     body2: {
       fontFamily: "Work Sans",
@@ -59,5 +61,8 @@ export const theme = createTheme({
     overline: {
       fontFamily: "Work Sans",
     },
+  },
+  shape: {
+    borderRadius: 15,
   },
 });
