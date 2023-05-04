@@ -1,7 +1,7 @@
-import { Typography } from "@mui/material";
+import ResponsiveDrawer from "../components/ResponsiveDrawer";
 
 function StartPage() {
-  return <Typography variant="h1">Heej!</Typography>;
+  return <ResponsiveDrawer />;
 }
 
 export default StartPage;
