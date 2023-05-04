@@ -1,7 +1,11 @@
-import { Typography } from "@mui/material";
+import StartView from "../components/StartView";
 
 function StartPage() {
-  return <Typography variant="h1">Heej!</Typography>;
+  return (
+    <main>
+      <StartView />
+    </main>
+  );
 }
 
 export default StartPage;
