@@ -16,7 +16,7 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
       <Route index element={<StartPage />} />
-      {/* <Route path="/signin" element={<SignInPage />} /> */}
+      <Route path="/chat" element={<ChatPage />} />
     </Route>
   )
 );
