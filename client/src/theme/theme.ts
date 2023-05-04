@@ -21,6 +21,7 @@ export const theme = createTheme({
   typography: {
     button: {
       fontFamily: "Forum",
+      textTransform: "none",
     },
     body2: {
       fontFamily: "Work Sans",
