@@ -4,11 +4,8 @@ import { theme } from "../theme/theme";
 function Title() {
   return (
     <Container
-      maxWidth="xs"
       sx={{
         padding: "0px !important",
-        marginLeft: "0",
-        marginRight: "0",
       }}>
       <Box>
         <Typography

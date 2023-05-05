@@ -7,9 +7,11 @@ function StartInfo() {
     <Container
       maxWidth="xs"
       sx={{
-        marginLeft: "2rem",
-        marginRight: "0",
         flex: 1,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
       }}>
       <Title />
       <NameForm />

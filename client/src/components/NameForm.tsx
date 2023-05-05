@@ -19,11 +19,8 @@ function NameForm() {
           sx={{
             "& .MuiInputBase-input": {
               bgcolor: "#ECECEC",
-
               borderRadius: "20rem",
-
               color: (theme) => theme.palette.text.secondary,
-
               fontFamily: (theme) => theme.typography.body1,
             },
             "& .MuiOutlinedInput-notchedOutline": {
