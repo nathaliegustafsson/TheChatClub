@@ -21,8 +21,8 @@ io.on("connection", (socket) => {
     console.log(room, socket.data.name, message);
   });
 
-  socket.on("join", (room, name, ack) => {
-    socket.data.name = name;
+  socket.on("join", (room, ack) => {
+    // socket.data.name = name;
     socket.join(room);
     console.log(socket.rooms);
     ack();
