@@ -11,12 +11,16 @@ function NameForm() {
         marginTop: "4rem",
       }}>
       <form style={rootStyle}>
-        <TextField id="name" type="text" name="name" label="Name"></TextField>
+        <TextField
+          id="name"
+          type="text"
+          name="name"
+          label="Enter your name"></TextField>
         <Button
           variant="contained"
           sx={{
             width: "25%",
-            fontSize: "1.5rem",
+            fontSize: "1rem",
           }}>
           Save
         </Button>

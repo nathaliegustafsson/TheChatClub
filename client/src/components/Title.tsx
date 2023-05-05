@@ -12,7 +12,7 @@ function Title() {
       }}>
       <Box>
         <Typography
-          variant="body1"
+          variant="body2"
           fontSize={"3.5rem"}
           marginBottom={"-1.5rem"}
           color={theme.palette.text.secondary}>

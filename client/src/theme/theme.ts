@@ -24,10 +24,10 @@ export const theme = createTheme({
       textTransform: "none",
     },
     body2: {
-      fontFamily: "Work Sans",
+      fontFamily: "Mrs Saint Delafield",
     },
     body1: {
-      fontFamily: "Mrs Saint Delafield",
+      fontFamily: "Forum",
     },
     subtitle2: {
       fontFamily: "Work Sans",
