@@ -11,7 +11,8 @@ function StartInfo() {
         marginRight: "0",
         marginTop: "20%",
         flexGrow: "1",
-      }}>
+      }}
+    >
       <Title />
       <NameForm />
     </Container>
