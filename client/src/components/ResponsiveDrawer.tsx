@@ -54,7 +54,7 @@ function NestedList(props: { items: Item[] }) {
                 <ListItem key={text} disablePadding>
                   <ListItemButton sx={{ pl: 4 }}>
                     <ListItemText>
-                      <Typography variant="body2">{text}</Typography>
+                      <Typography variant="body1">{text}</Typography>
                     </ListItemText>
                   </ListItemButton>
                 </ListItem>
@@ -79,7 +79,7 @@ function ResponsiveDrawer(props: Props) {
     <div style={{ paddingLeft: "1.5rem", paddingTop: "0" }}>
       <Toolbar />
       <Typography
-        variant="body1"
+        variant="body2"
         sx={{ fontSize: "2rem", marginBottom: "-1rem" }}
       >
         The
