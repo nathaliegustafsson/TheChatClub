@@ -18,6 +18,7 @@ import {
   Typography,
 } from "@mui/material";
 import * as React from "react";
+import ChatWindow from "./ChatWindow";
 
 const drawerWidth = 240;
 
@@ -203,9 +204,7 @@ function ResponsiveDrawer(props: Props) {
       >
         <Toolbar />
         {/* Här fanns det text som syntes på sidan */}
-        <Typography variant="body2" sx={{ color: "text.secondary" }}>
-          Hej hej!
-        </Typography>
+        <ChatWindow />
       </Box>
     </Box>
   );
