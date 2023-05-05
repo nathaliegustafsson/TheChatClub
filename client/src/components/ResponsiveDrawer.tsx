@@ -203,7 +203,6 @@ function ResponsiveDrawer(props: Props) {
         }}
       >
         <Toolbar />
-        {/* Här fanns det text som syntes på sidan */}
         <ChatWindow />
       </Box>
     </Box>
