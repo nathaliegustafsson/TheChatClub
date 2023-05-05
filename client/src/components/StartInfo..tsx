@@ -9,8 +9,7 @@ function StartInfo() {
       sx={{
         marginLeft: "2rem",
         marginRight: "0",
-        marginTop: "20%",
-        flexGrow: "1",
+        flex: 1,
       }}>
       <Title />
       <NameForm />
