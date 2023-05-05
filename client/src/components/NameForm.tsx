@@ -1,7 +1,23 @@
 import { Button, Container, TextField } from "@mui/material";
-import { CSSProperties } from "react";
+import { CSSProperties, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSocket } from "../context/SocketContext";
 
 function NameForm() {
+  const [username, setUsername] = useState("");
+  const { saveUsername } = useSocket();
+  const navigate = useNavigate();
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setUsername(event.target.value);
+  };
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    saveUsername(username);
+    navigate("/chat");
+  };
+
   return (
     <Container
       sx={{
@@ -9,19 +25,25 @@ function NameForm() {
         flexDirection: "column",
         padding: "0px !important",
         marginTop: "4rem",
-      }}>
-      <form style={rootStyle}>
+      }}
+    >
+      <form style={rootStyle} onSubmit={handleSubmit}>
         <TextField
-          id="name"
+          id="username"
           type="text"
-          name="name"
-          label="Enter your name"></TextField>
+          name="username"
+          label="Enter your username"
+          value={username}
+          onChange={handleChange}
+        ></TextField>
         <Button
           variant="contained"
+          type="submit"
           sx={{
             width: "25%",
             fontSize: "1rem",
-          }}>
+          }}
+        >
           Save
         </Button>
       </form>
