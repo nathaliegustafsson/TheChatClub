@@ -96,7 +96,7 @@ function ResponsiveDrawer(props: Props) {
       <List>
         <Button
           variant="contained"
-          sx={{ fontSize: "1.25rem", marginBottom: "1rem" }}
+          sx={{ fontSize: "1rem", marginBottom: "1rem" }}
         >
           Create a room
         </Button>
