@@ -13,6 +13,7 @@ interface ContextValues {
   room?: string;
   messages: Message[];
   saveUsername: (username: string) => void;
+  username?: string;
 }
 
 const socket = io();
@@ -78,7 +79,7 @@ function SocketProvider({ children }: PropsWithChildren) {
 
   return (
     <SocketContext.Provider
-      value={{ saveUsername, joinRoom, sendMessage, room, messages }}
+      value={{ saveUsername, joinRoom, sendMessage, room, messages, username }}
     >
       {children}
     </SocketContext.Provider>
