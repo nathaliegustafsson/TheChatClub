@@ -3,13 +3,10 @@ import { Box, Button, Container, TextField } from "@mui/material";
 function ChatWindow() {
   return (
     <Container
-      maxWidth="lg"
       sx={{
-        bgcolor: "lightblue",
         display: "flex",
         flexDirection: "column",
-        height: "100%",
-        alignContent: "space-between",
+        height: "83vh",
       }}
     >
       <h1>The Chat</h1>
@@ -19,17 +16,11 @@ function ChatWindow() {
       <Box
         sx={{
           display: "flex",
-          alignItems: "center",
-          bgcolor: "pink",
-          width: "100%",
+          alignItems: "flex-end",
           flex: 1,
-          "& .MuiTextField-root": {
-            m: 2,
-          },
         }}
       >
         <TextField
-          fullWidth
           id="outlined-username-input"
           name="username"
           // onChange={formik.handleChange}
@@ -38,30 +29,24 @@ function ChatWindow() {
           // error={Boolean(formik.touched.username && formik.errors.username)}
           // helperText={formik.touched.username && formik.errors.username}
           sx={{
-            bgcolor: "green",
             flex: 1,
+            marginRight: "1rem",
             "& .MuiInputBase-input": {
               bgcolor: "#ECECEC",
               borderRadius: "20rem",
               height: "0.5rem",
-              flex: 1,
+              color: (theme) => theme.palette.text.secondary,
+              fontFamily: (theme) => theme.typography.body2,
             },
             "& .MuiOutlinedInput-root": {
-              borderRadius: "20rem",
               height: "2.5rem",
-              flex: 1,
             },
             "& .MuiOutlinedInput-notchedOutline": {
               borderColor: "rgb(218, 215, 215)",
-              flex: 1,
             },
           }}
         />
-        <Button
-          variant="contained"
-          type="submit"
-          sx={{ borderRadius: "3rem", height: "2.5rem", width: "8rem" }}
-        >
+        <Button variant="contained" type="submit">
           Send
         </Button>
       </Box>
