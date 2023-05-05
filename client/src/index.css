@@ -5,6 +5,7 @@ body {
   display: flex;
   justify-content: center;
   height: 100%;
+  background-color: "#08162C";
 }
 
 #root {
