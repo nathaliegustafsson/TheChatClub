@@ -1,11 +1,10 @@
-import ChatWindowTest from "../components/ChatWindowTest";
+import ChatWindow from "../components/ChatWindow";
 import ResponsiveDrawer from "../components/ResponsiveDrawer";
 
 function ChatPage() {
   return (
     <div>
       <main>
-        <ChatWindowTest />
         <ResponsiveDrawer />
       </main>
     </div>
