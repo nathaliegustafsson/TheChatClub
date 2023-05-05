@@ -1,5 +1,11 @@
+import StartView from "../components/StartView";
+
 function StartPage() {
-  return <div></div>;
+  return (
+    <main>
+      <StartView />
+    </main>
+  );
 }
 
 export default StartPage;

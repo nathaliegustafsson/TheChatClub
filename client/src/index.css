@@ -2,11 +2,14 @@ body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  background-color: "#08162C";
+}
+html, body, #root, main {
+  height: 100%;
   display: flex;
   justify-content: center;
   height: 100%;
 }
-
 #root {
   width: 100%;
 }
