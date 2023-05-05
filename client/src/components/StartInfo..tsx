@@ -12,6 +12,7 @@ function StartInfo() {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
+        marginTop: { xs: "2rem" },
       }}>
       <Title />
       <NameForm />

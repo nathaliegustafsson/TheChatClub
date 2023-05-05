@@ -1,17 +1,17 @@
 import { Box, Container } from "@mui/material";
 import { CSSProperties } from "react";
 import StartInfo from "./StartInfo.";
+import background from "/src/assets/starsky.png";
 
 function StartView() {
   return (
     <Container
       maxWidth="xl"
       sx={{
-        background: "#08162C",
+        backgroundImage: `url(${background})`,
         padding: "0px !important",
         display: "flex",
         flexDirection: { xs: "column", md: "row" },
-        justifyContent: "center",
         alignItems: "center",
         height: "100%",
       }}>
