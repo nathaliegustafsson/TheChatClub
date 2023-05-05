@@ -77,7 +77,10 @@ function ResponsiveDrawer(props: Props) {
   const drawer = (
     <div style={{ paddingLeft: "1.5rem", paddingTop: "0" }}>
       <Toolbar />
-      <Typography variant="body1" sx={{ fontSize: "2rem" }}>
+      <Typography
+        variant="body1"
+        sx={{ fontSize: "2rem", marginBottom: "-1rem" }}
+      >
         The
       </Typography>
       <Typography variant="h4">CHAT CLUB</Typography>
