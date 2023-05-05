@@ -1,9 +1,12 @@
+import ChatWindow from "../components/ChatWindow";
 import ResponsiveDrawer from "../components/ResponsiveDrawer";
 
 function ChatPage() {
   return (
     <div>
-      <ResponsiveDrawer />
+      <main>
+        <ResponsiveDrawer />
+      </main>
     </div>
   );
 }
