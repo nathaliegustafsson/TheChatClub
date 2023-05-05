@@ -1,7 +1,13 @@
+import ChatWindowTest from "../components/ChatWindowTest";
+
 function ChatPage() {
-    return (
-        <div>hehehe</div>
-    )
+  return (
+    <div>
+      <main>
+        <ChatWindowTest />
+      </main>
+    </div>
+  );
 }
 
 export default ChatPage;
