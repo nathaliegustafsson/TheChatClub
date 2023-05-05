@@ -15,7 +15,21 @@ function NameForm() {
           id="name"
           type="text"
           name="name"
-          label="Enter your name"></TextField>
+          placeholder="Enter your name"
+          sx={{
+            "& .MuiInputBase-input": {
+              bgcolor: "#ECECEC",
+
+              borderRadius: "20rem",
+
+              color: (theme) => theme.palette.text.secondary,
+
+              fontFamily: (theme) => theme.typography.body1,
+            },
+            "& .MuiOutlinedInput-notchedOutline": {
+              border: "none",
+            },
+          }}></TextField>
         <Button
           variant="contained"
           sx={{
