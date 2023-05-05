@@ -1,6 +1,5 @@
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
-import MenuIcon from "@mui/icons-material/Menu";
 import {
   AppBar,
   Box,
@@ -18,6 +17,7 @@ import {
   Typography,
 } from "@mui/material";
 import * as React from "react";
+import ChatWindow from "./ChatWindow";
 
 const drawerWidth = 240;
 
@@ -95,7 +95,7 @@ function ResponsiveDrawer(props: Props) {
       <List>
         <Button
           variant="contained"
-          sx={{ fontSize: "1.25rem", marginBottom: "1rem" }}
+          sx={{ fontSize: "1rem", marginBottom: "1rem" }}
         >
           Create a room
         </Button>
@@ -140,19 +140,26 @@ function ResponsiveDrawer(props: Props) {
           ml: { sm: `${drawerWidth}px` },
         }}
       >
-        <Toolbar>
+        <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
           <IconButton
+            className="material-symbols-outlined"
             color="inherit"
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: "none" } }}
+            sx={{ display: { sm: "none" }, color: "black" }}
           >
-            <MenuIcon />
+            menu
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Room
+            Room Name
           </Typography>
+          <IconButton
+            className="material-symbols-outlined"
+            sx={{ fontSize: "2rem", color: "black" }}
+          >
+            logout
+          </IconButton>
         </Toolbar>
       </AppBar>
       <Box
@@ -202,10 +209,7 @@ function ResponsiveDrawer(props: Props) {
         }}
       >
         <Toolbar />
-        {/* Här fanns det text som syntes på sidan */}
-        <Typography variant="body2" sx={{ color: "text.secondary" }}>
-          Hej hej!
-        </Typography>
+        <ChatWindow />
       </Box>
     </Box>
   );
