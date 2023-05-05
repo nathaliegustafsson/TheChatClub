@@ -1,7 +1,5 @@
-import ResponsiveDrawer from "../components/ResponsiveDrawer";
-
 function StartPage() {
-  return <ResponsiveDrawer />;
+  return <div></div>;
 }
 
 export default StartPage;
