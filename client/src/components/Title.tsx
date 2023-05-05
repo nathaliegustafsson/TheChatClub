@@ -1,9 +1,9 @@
-import { Box, Container, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { theme } from "../theme/theme";
 
 function Title() {
   return (
-    <Container
+    <Box
       sx={{
         padding: "0px !important",
       }}>
@@ -27,7 +27,7 @@ function Title() {
           Whenever, wherever you want.
         </Typography>
       </Box>
-    </Container>
+    </Box>
   );
 }
 

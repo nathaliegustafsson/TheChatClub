@@ -1,14 +1,16 @@
-import { Button, Container, TextField } from "@mui/material";
+import { Box, Button, TextField } from "@mui/material";
 import { CSSProperties } from "react";
 
 function NameForm() {
   return (
-    <Container
+    <Box
+      maxWidth={"sm"}
       sx={{
         display: "flex",
         flexDirection: "column",
         padding: "0px !important",
         marginTop: "4rem",
+        // maxWidth: "100%",
       }}>
       <form style={rootStyle}>
         <TextField
@@ -36,7 +38,7 @@ function NameForm() {
           Save
         </Button>
       </form>
-    </Container>
+    </Box>
   );
 }
 
@@ -44,6 +46,7 @@ const rootStyle: CSSProperties = {
   display: "flex",
   flexDirection: "column",
   gap: "0.5rem",
+  width: "100%",
 };
 
 export default NameForm;
