@@ -11,7 +11,7 @@ function StartInfo() {
         flex: 1,
         display: "flex",
         flexDirection: "column",
-        alignItems: "center",
+        // alignItems: "center",
         justifyContent: "center",
         marginTop: { xs: "2rem" },
       }}>

@@ -15,12 +15,21 @@ function StartView() {
         alignItems: "center",
         height: "100%",
       }}>
-      <StartInfo />
       <Box
         sx={{
           height: "100%",
           flex: 1,
           display: "flex",
+          justifyContent: "center",
+          margin: "1rem",
+        }}>
+        <StartInfo />
+      </Box>
+      <Box
+        sx={{
+          height: "100%",
+          flex: 1,
+          display: { xs: "none", md: "flex" },
           justifyContent: "center",
         }}>
         <img style={imageStyle} src="/src/assets/fullhouse.png" alt="" />
