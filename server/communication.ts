@@ -1,5 +1,5 @@
 export interface ServerToClientEvents {
-  message: (name: string, message: string) => void;
+  message: (username: string, message: string) => void;
   rooms: (rooms: string[]) => void;
 }
 
@@ -15,10 +15,10 @@ export interface InterServerEvents {
 }
 
 export interface SocketData {
-  name: string;
+  username: string;
 }
 
 export interface Message {
-  name: string;
+  username: string;
   message: string;
 }
