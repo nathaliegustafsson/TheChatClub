@@ -1,5 +1,5 @@
-import ExpandLess from "@mui/icons-material/ExpandLess";
-import ExpandMore from "@mui/icons-material/ExpandMore";
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
 import {
   AppBar,
   Box,
@@ -13,12 +13,14 @@ import {
   ListItem,
   ListItemButton,
   ListItemText,
+  TextField,
   Toolbar,
   Typography,
-} from "@mui/material";
-import * as React from "react";
-import { useSocket } from "../context/SocketContext";
-import ChatWindow from "./ChatWindow";
+} from '@mui/material';
+import * as React from 'react';
+import { useState } from 'react';
+import { useSocket } from '../context/SocketContext';
+import ChatWindow from './ChatWindow';
 
 const drawerWidth = 240;
 
@@ -68,20 +70,35 @@ function NestedList(props: { items: Item[] }) {
 }
 
 function ResponsiveDrawer(props: Props) {
-  const { username } = useSocket();
   const { window } = props;
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const { joinRoom, username } = useSocket();
+  const [room, setRoom] = useState('');
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRoom(event.target.value);
+  };
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    // if (username) {
+    joinRoom(room);
+    // } else {
+    //   console.log('username not found');
+    // }
+    // navigate('/chat');
+  };
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
   const drawer = (
-    <div style={{ paddingLeft: "1.5rem", paddingTop: "0" }}>
+    <div style={{ paddingLeft: '1.5rem', paddingTop: '0' }}>
       <Toolbar />
       <Typography
         variant="body2"
-        sx={{ fontSize: "2rem", marginBottom: "-1rem" }}
+        sx={{ fontSize: '2rem', marginBottom: '-1rem' }}
       >
         The
       </Typography>
@@ -89,31 +106,65 @@ function ResponsiveDrawer(props: Props) {
       <Divider />
       <Typography
         variant="h5"
-        sx={{ marginBottom: "2rem", marginTop: "1.5rem" }}
+        sx={{ marginBottom: '2rem', marginTop: '1.5rem' }}
       >
         Welcome {username}!
       </Typography>
       <Divider />
       <List>
-        <Button
-          variant="contained"
-          sx={{ fontSize: "1rem", marginBottom: "1rem" }}
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            padding: '0px !important',
+            marginTop: '4rem',
+          }}
         >
-          Create a room
-        </Button>
+          <form style={rootStyle} onSubmit={handleSubmit}>
+            <TextField
+              id="room"
+              type="text"
+              name="room"
+              label="Create a room"
+              value={room}
+              onChange={handleChange}
+              sx={{
+                '& .MuiInputBase-input': {
+                  bgcolor: '#ECECEC',
+                  borderRadius: '20rem',
+                  color: (theme) => theme.palette.text.secondary,
+                  fontFamily: (theme) => theme.typography.body1,
+                },
+                '& .MuiOutlinedInput-notchedOutline': {
+                  border: 'none',
+                },
+              }}
+            ></TextField>
+            <Button
+              variant="contained"
+              type="submit"
+              sx={{
+                width: '70%',
+                fontSize: '1rem',
+              }}
+            >
+              Create a room
+            </Button>
+          </form>
+        </Box>
         <NestedList
           items={[
             {
-              title: "Join a room",
-              children: ["Kodsnack", "TheRockiRock", "Bumpy Monster"],
+              title: 'Join a room',
+              children: ['Kodsnack', 'TheRockiRock', 'Bumpy Monster'],
             },
           ]}
         />
         <NestedList
           items={[
             {
-              title: "Users online",
-              children: ["Nathalie", "Sebastian", "Lisa Marie"],
+              title: 'Users online',
+              children: ['Nathalie', 'Sebastian', 'Lisa Marie'],
             },
           ]}
         />
@@ -121,7 +172,7 @@ function ResponsiveDrawer(props: Props) {
           items={[
             {
               title: "DM's",
-              children: ["Nathalie", "Sebastian", "Emil", "Gabriel"],
+              children: ['Nathalie', 'Sebastian', 'Emil', 'Gabriel'],
             },
           ]}
         />
@@ -133,7 +184,7 @@ function ResponsiveDrawer(props: Props) {
     window !== undefined ? () => window().document.body : undefined;
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <AppBar
         position="fixed"
@@ -142,23 +193,23 @@ function ResponsiveDrawer(props: Props) {
           ml: { sm: `${drawerWidth}px` },
         }}
       >
-        <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
+        <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <IconButton
             className="material-symbols-outlined"
             color="inherit"
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ display: { sm: "none" }, color: "black" }}
+            sx={{ display: { sm: 'none' }, color: 'black' }}
           >
             menu
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Room Name
+            {room}
           </Typography>
           <IconButton
             className="material-symbols-outlined"
-            sx={{ fontSize: "2rem", color: "black" }}
+            sx={{ fontSize: '2rem', color: 'black' }}
           >
             logout
           </IconButton>
@@ -179,9 +230,9 @@ function ResponsiveDrawer(props: Props) {
             keepMounted: true, // Better open performance on mobile.
           }}
           sx={{
-            display: { xs: "block", sm: "none" },
-            "& .MuiDrawer-paper": {
-              boxSizing: "border-box",
+            display: { xs: 'block', sm: 'none' },
+            '& .MuiDrawer-paper': {
+              boxSizing: 'border-box',
               width: drawerWidth,
             },
           }}
@@ -191,9 +242,9 @@ function ResponsiveDrawer(props: Props) {
         <Drawer
           variant="permanent"
           sx={{
-            display: { xs: "none", sm: "block" },
-            "& .MuiDrawer-paper": {
-              boxSizing: "border-box",
+            display: { xs: 'none', sm: 'block' },
+            '& .MuiDrawer-paper': {
+              boxSizing: 'border-box',
               width: drawerWidth,
             },
           }}
@@ -216,5 +267,12 @@ function ResponsiveDrawer(props: Props) {
     </Box>
   );
 }
+
+const rootStyle: React.CSSProperties = {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '0.5rem',
+  width: '100%',
+};
 
 export default ResponsiveDrawer;
