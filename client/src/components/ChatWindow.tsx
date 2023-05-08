@@ -67,9 +67,6 @@ function ChatWindow() {
           <Button variant="contained" type="submit">
             Send
           </Button>
-          <Button onClick={() => console.log(messages)}>
-            GE MIG MEDDELANDEN
-          </Button>
         </form>
       </Box>
     </Container>
