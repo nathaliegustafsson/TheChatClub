@@ -62,7 +62,7 @@ function SocketProvider({ children }: PropsWithChildren) {
       setMessages((messages) => [...messages, { username, message }]);
     }
     function rooms(rooms: string[]) {
-      console.log(rooms);
+      // console.log(rooms);
       setAllRooms(rooms);
     }
     function username(username: string) {

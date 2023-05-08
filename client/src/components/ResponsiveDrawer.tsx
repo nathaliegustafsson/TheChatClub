@@ -33,13 +33,23 @@ interface Item {
   children: string[];
 }
 
-function NestedList(props: { items: Item[] }) {
+function NestedList(props: {
+  items: Item[];
+  joinRoom: (room: string) => void;
+}) {
   const [open, setOpen] = React.useState(true);
 
   const handleClick = () => {
     setOpen(!open);
   };
 
+  const handleRoomClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    const room = (event.target as HTMLElement).dataset.room;
+    if (room) {
+      console.log(room);
+      props.joinRoom(room);
+    }
+  };
   return (
     <React.Fragment>
       {props.items.map((item) => (
@@ -54,7 +64,11 @@ function NestedList(props: { items: Item[] }) {
             <List component="div" disablePadding>
               {item.children.map((text, index) => (
                 <ListItem key={text} disablePadding>
-                  <ListItemButton sx={{ pl: 4 }}>
+                  <ListItemButton
+                    data-room={text}
+                    onClick={handleRoomClick}
+                    sx={{ pl: 4 }}
+                  >
                     <ListItemText>
                       <Typography variant="body1">{text}</Typography>
                     </ListItemText>
@@ -159,6 +173,7 @@ function ResponsiveDrawer(props: Props) {
               children: allRooms ?? [],
             },
           ]}
+          joinRoom={joinRoom}
         />
         <NestedList
           items={[
