@@ -1,23 +1,31 @@
+import { Box, Container } from "@mui/material";
 import { CSSProperties } from "react";
 import StartInfo from "./StartInfo.";
+import background from "/src/assets/starsky.png";
 
 function StartView() {
   return (
-    // <Container
-    // maxWidth="xl"
-    // sx={{
-    //   background: (theme) => theme.palette.background.default,
-    //   padding: "0px !important",
-    //   display: "flex",
-    //   flexDirection: "row",
-    //   justifyContent: "space-between",
-    //   position: "relative",
-    // }}>
-    <div style={rootStyle}>
+    <Container
+      maxWidth="xl"
+      sx={{
+        backgroundImage: `url(${background})`,
+        padding: "0px !important",
+        display: "flex",
+        flexDirection: { xs: "column", md: "row" },
+        alignItems: "center",
+        height: "100%",
+      }}>
       <StartInfo />
-      <img style={imageStyle} src="/src/assets/Chathouse.svg" alt="" />
-    </div>
-    // </Container>
+      <Box
+        sx={{
+          height: "100%",
+          flex: 1,
+          display: "flex",
+          justifyContent: "center",
+        }}>
+        <img style={imageStyle} src="/src/assets/fullhouse.png" alt="" />
+      </Box>
+    </Container>
   );
 }
 
@@ -39,6 +47,10 @@ const rootStyle: CSSProperties = {
   flexDirection: "row",
   justifyContent: "space-between",
   // position: "relative",
+  marginTop: "auto",
+  marginBottom: "0",
+  height: "90%",
+
 };
 
 export default StartView;

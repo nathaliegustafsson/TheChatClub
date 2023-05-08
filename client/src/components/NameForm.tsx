@@ -1,4 +1,4 @@
-import { Button, Container, TextField } from "@mui/material";
+import { Button, Box, TextField } from "@mui/material";
 import { CSSProperties, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSocket } from "../context/SocketContext";
@@ -19,7 +19,7 @@ function NameForm() {
   };
 
   return (
-    <Container
+    <Box
       sx={{
         display: "flex",
         flexDirection: "column",
@@ -35,6 +35,17 @@ function NameForm() {
           label="Enter your username"
           value={username}
           onChange={handleChange}
+           sx={{
+            "& .MuiInputBase-input": {
+              bgcolor: "#ECECEC",
+              borderRadius: "20rem",
+              color: (theme) => theme.palette.text.secondary,
+              fontFamily: (theme) => theme.typography.body1,
+            },
+            "& .MuiOutlinedInput-notchedOutline": {
+              border: "none",
+            },
+          }}
         ></TextField>
         <Button
           variant="contained"
@@ -47,7 +58,8 @@ function NameForm() {
           Save
         </Button>
       </form>
-    </Container>
+    </Box>
+
   );
 }
 
@@ -55,6 +67,8 @@ const rootStyle: CSSProperties = {
   display: "flex",
   flexDirection: "column",
   gap: "0.5rem",
+  width: "100%",
+
 };
 
 export default NameForm;

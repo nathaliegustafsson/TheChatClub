@@ -28,7 +28,7 @@ export const theme = createTheme({
       fontFamily: "Mrs Saint Delafield",
     },
     body1: {
-      fontFamily: "Work Sans",
+      fontFamily: "Forum",
     },
     subtitle2: {
       fontFamily: "Work Sans",
