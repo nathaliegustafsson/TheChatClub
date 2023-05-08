@@ -40,9 +40,11 @@ function SocketProvider({ children }: PropsWithChildren) {
   };
 
   const joinRoom = (room: string) => {
+    // socket.emit('leave', room, () => {
     socket.emit('join', room, () => {
       setRoom(room);
     });
+    // });
   };
 
   const sendMessage = (message: string) => {
@@ -62,7 +64,7 @@ function SocketProvider({ children }: PropsWithChildren) {
       setMessages((messages) => [...messages, { username, message }]);
     }
     function rooms(rooms: string[]) {
-      // console.log(rooms);
+      console.log(rooms);
       setAllRooms(rooms);
     }
     function username(username: string) {
