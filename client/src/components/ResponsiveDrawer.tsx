@@ -72,7 +72,7 @@ function NestedList(props: { items: Item[] }) {
 function ResponsiveDrawer(props: Props) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { joinRoom, username } = useSocket();
+  const { joinRoom, username, allRooms } = useSocket();
   const [room, setRoom] = useState('');
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -156,15 +156,15 @@ function ResponsiveDrawer(props: Props) {
           items={[
             {
               title: 'Join a room',
-              children: ['Kodsnack', 'TheRockiRock', 'Bumpy Monster'],
+              children: allRooms ?? [],
             },
           ]}
         />
         <NestedList
           items={[
             {
-              title: 'Users online',
-              children: ['Nathalie', 'Sebastian', 'Lisa Marie'],
+              title: 'Users',
+              children: ['Björne', 'Snigel'],
             },
           ]}
         />

@@ -14,6 +14,8 @@ export interface ContextValues {
   sendMessage: (message: string) => void;
   room?: string;
   setRoom?: Dispatch<SetStateAction<string | undefined>>;
+  allRooms?: string[];
+  setAllRooms?: string[];
   messages: Message[];
   saveUsername: (username: string) => void;
   username?: string;
@@ -28,6 +30,7 @@ function SocketProvider({ children }: PropsWithChildren) {
   const [username, setUsername] = useState<string>();
   const [messages, setMessages] = useState<Message[]>([]);
   const [room, setRoom] = useState<string>();
+  const [allRooms, setAllRooms] = useState<string[]>();
   // const [rooms, setRooms] = useState<string>();
 
   const saveUsername = (username: string) => {
@@ -60,6 +63,7 @@ function SocketProvider({ children }: PropsWithChildren) {
     }
     function rooms(rooms: string[]) {
       console.log(rooms);
+      setAllRooms(rooms);
     }
     function username(username: string) {
       console.log(username);
@@ -90,6 +94,7 @@ function SocketProvider({ children }: PropsWithChildren) {
         setRoom,
         messages,
         username,
+        allRooms,
       }}
     >
       {children}
