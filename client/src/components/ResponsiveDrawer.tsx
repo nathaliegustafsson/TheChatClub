@@ -182,6 +182,7 @@ function ResponsiveDrawer(props: Props) {
               children: ['Björne', 'Snigel'],
             },
           ]}
+          joinRoom={joinRoom}
         />
         <NestedList
           items={[
@@ -190,6 +191,7 @@ function ResponsiveDrawer(props: Props) {
               children: ['Nathalie', 'Sebastian', 'Emil', 'Gabriel'],
             },
           ]}
+          joinRoom={joinRoom}
         />
       </List>
     </div>
