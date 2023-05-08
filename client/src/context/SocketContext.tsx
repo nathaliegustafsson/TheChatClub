@@ -19,6 +19,7 @@ export interface ContextValues {
   messages: Message[];
   saveUsername: (username: string) => void;
   username?: string;
+  leaveRoom: (room: string) => void;
 }
 
 const socket = io();
@@ -40,11 +41,16 @@ function SocketProvider({ children }: PropsWithChildren) {
   };
 
   const joinRoom = (room: string) => {
-    // socket.emit('leave', room, () => {
     socket.emit('join', room, () => {
       setRoom(room);
     });
-    // });
+  };
+
+  const leaveRoom = (room: string) => {
+    socket.emit('leave', room, () => {
+      setRoom('');
+      console.log('LÄMNAR RUM');
+    });
   };
 
   const sendMessage = (message: string) => {
@@ -70,12 +76,16 @@ function SocketProvider({ children }: PropsWithChildren) {
     function username(username: string) {
       console.log(username);
     }
+    function leave() {
+      console.log('left room');
+    }
 
     socket.on('connect', connect);
     socket.on('disconnect', disconnect);
     socket.on('message', message);
     socket.on('rooms', rooms);
     socket.on('username', username);
+    socket.on('leave', leave);
 
     return () => {
       socket.off('connect', connect);
@@ -83,6 +93,7 @@ function SocketProvider({ children }: PropsWithChildren) {
       socket.off('message', message);
       socket.off('rooms', rooms);
       socket.off('username', username);
+      socket.off('leave', leave);
     };
   }, []);
 
@@ -97,6 +108,7 @@ function SocketProvider({ children }: PropsWithChildren) {
         messages,
         username,
         allRooms,
+        leaveRoom,
       }}
     >
       {children}

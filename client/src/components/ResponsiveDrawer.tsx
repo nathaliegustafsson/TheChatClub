@@ -86,7 +86,7 @@ function NestedList(props: {
 function ResponsiveDrawer(props: Props) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { joinRoom, username, allRooms, room } = useSocket();
+  const { joinRoom, username, allRooms, room, leaveRoom } = useSocket();
   const [localRoom, setLocalRoom] = useState('');
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -131,7 +131,6 @@ function ResponsiveDrawer(props: Props) {
             display: 'flex',
             flexDirection: 'column',
             padding: '0px !important',
-            marginTop: '4rem',
           }}
         >
           <form style={rootStyle} onSubmit={handleSubmit}>
@@ -226,6 +225,7 @@ function ResponsiveDrawer(props: Props) {
           </Typography>
           <IconButton
             className="material-symbols-outlined"
+            onClick={() => leaveRoom(room!)}
             sx={{ fontSize: '2rem', color: 'black' }}
           >
             logout

@@ -7,7 +7,7 @@ export interface ClientToServerEvents {
   message: (room: string, message: string) => void;
   join: (room: string, ack: () => void) => void;
   username: (username: string, ack: () => void) => void;
-  leave: (room: string) => void;
+  leave: (room: string, ack: () => void) => void;
 }
 
 export interface InterServerEvents {
