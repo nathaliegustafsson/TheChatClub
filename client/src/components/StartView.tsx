@@ -30,9 +30,27 @@ function StartView() {
 }
 
 const imageStyle: CSSProperties = {
+  marginTop: "2rem",
+  // position: "absolute",
+  bottom: "0",
+  right: "0",
+  marginRight: "auto",
+  marginBottom: "auto",
+  height: "90%",
+  zIndex: "2",
+};
+
+const rootStyle: CSSProperties = {
+  background: "#08162C",
+  padding: "0px !important",
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "space-between",
+  // position: "relative",
   marginTop: "auto",
   marginBottom: "0",
   height: "90%",
+
 };
 
 export default StartView;

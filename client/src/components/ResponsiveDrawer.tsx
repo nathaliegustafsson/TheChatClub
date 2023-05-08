@@ -17,6 +17,7 @@ import {
   Typography,
 } from "@mui/material";
 import * as React from "react";
+import { useSocket } from "../context/SocketContext";
 import ChatWindow from "./ChatWindow";
 
 const drawerWidth = 240;
@@ -53,7 +54,7 @@ function NestedList(props: { items: Item[] }) {
                 <ListItem key={text} disablePadding>
                   <ListItemButton sx={{ pl: 4 }}>
                     <ListItemText>
-                      <Typography variant="body2">{text}</Typography>
+                      <Typography variant="body1">{text}</Typography>
                     </ListItemText>
                   </ListItemButton>
                 </ListItem>
@@ -67,6 +68,7 @@ function NestedList(props: { items: Item[] }) {
 }
 
 function ResponsiveDrawer(props: Props) {
+  const { username } = useSocket();
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
@@ -78,7 +80,7 @@ function ResponsiveDrawer(props: Props) {
     <div style={{ paddingLeft: "1.5rem", paddingTop: "0" }}>
       <Toolbar />
       <Typography
-        variant="body1"
+        variant="body2"
         sx={{ fontSize: "2rem", marginBottom: "-1rem" }}
       >
         The
@@ -89,7 +91,7 @@ function ResponsiveDrawer(props: Props) {
         variant="h5"
         sx={{ marginBottom: "2rem", marginTop: "1.5rem" }}
       >
-        Welcome Moa!
+        Welcome {username}!
       </Typography>
       <Divider />
       <List>

@@ -9,6 +9,7 @@ html, body, #root, main {
   display: flex;
   justify-content: center;
   height: 100%;
+  /* background-color: "#08162C"; */
 }
 #root {
   width: 100%;

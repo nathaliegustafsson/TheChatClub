@@ -1,24 +1,41 @@
-import { Box, Button, TextField } from "@mui/material";
-import { CSSProperties } from "react";
+import { Button, Box, TextField } from "@mui/material";
+import { CSSProperties, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSocket } from "../context/SocketContext";
 
 function NameForm() {
+  const [username, setUsername] = useState("");
+  const { saveUsername } = useSocket();
+  const navigate = useNavigate();
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setUsername(event.target.value);
+  };
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    saveUsername(username);
+    navigate("/chat");
+  };
+
   return (
     <Box
-      maxWidth={"sm"}
       sx={{
         display: "flex",
         flexDirection: "column",
         padding: "0px !important",
         marginTop: "4rem",
-        // maxWidth: "100%",
-      }}>
-      <form style={rootStyle}>
+      }}
+    >
+      <form style={rootStyle} onSubmit={handleSubmit}>
         <TextField
-          id="name"
+          id="username"
           type="text"
-          name="name"
-          placeholder="Enter your name"
-          sx={{
+          name="username"
+          label="Enter your username"
+          value={username}
+          onChange={handleChange}
+           sx={{
             "& .MuiInputBase-input": {
               bgcolor: "#ECECEC",
               borderRadius: "20rem",
@@ -28,17 +45,21 @@ function NameForm() {
             "& .MuiOutlinedInput-notchedOutline": {
               border: "none",
             },
-          }}></TextField>
+          }}
+        ></TextField>
         <Button
           variant="contained"
+          type="submit"
           sx={{
             width: "25%",
             fontSize: "1rem",
-          }}>
+          }}
+        >
           Save
         </Button>
       </form>
     </Box>
+
   );
 }
 
@@ -47,6 +68,7 @@ const rootStyle: CSSProperties = {
   flexDirection: "column",
   gap: "0.5rem",
   width: "100%",
+
 };
 
 export default NameForm;
