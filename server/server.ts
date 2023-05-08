@@ -28,11 +28,11 @@ io.on('connection', (socket) => {
   });
 
   socket.on('join', (room, ack) => {
-    const currentRoom = Object.keys(socket.rooms).filter(
-      (roomId) => roomId !== socket.id
-    )[0];
-    if (currentRoom) {
-      socket.leave(currentRoom);
+    // Leave all rooms before entering a new one.
+    for (const roomId in socket.rooms) {
+      if (roomId !== socket.id) {
+        socket.leave(roomId);
+      }
     }
     socket.join(room);
     console.log(socket.rooms);
