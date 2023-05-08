@@ -33,13 +33,23 @@ interface Item {
   children: string[];
 }
 
-function NestedList(props: { items: Item[] }) {
+function NestedList(props: {
+  items: Item[];
+  joinRoom: (localroom: string) => void;
+}) {
   const [open, setOpen] = React.useState(true);
 
   const handleClick = () => {
     setOpen(!open);
   };
 
+  const handleRoomClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    const localRoom = (event.target as HTMLElement).dataset.localroom;
+    if (localRoom) {
+      console.log(localRoom);
+      props.joinRoom(localRoom);
+    }
+  };
   return (
     <React.Fragment>
       {props.items.map((item) => (
@@ -54,7 +64,11 @@ function NestedList(props: { items: Item[] }) {
             <List component="div" disablePadding>
               {item.children.map((text, index) => (
                 <ListItem key={text} disablePadding>
-                  <ListItemButton sx={{ pl: 4 }}>
+                  <ListItemButton
+                    data-localroom={text}
+                    onClick={handleRoomClick}
+                    sx={{ pl: 4 }}
+                  >
                     <ListItemText>
                       <Typography variant="body1">{text}</Typography>
                     </ListItemText>
@@ -72,17 +86,17 @@ function NestedList(props: { items: Item[] }) {
 function ResponsiveDrawer(props: Props) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { joinRoom, username } = useSocket();
-  const [room, setRoom] = useState('');
+  const { joinRoom, username, allRooms, room } = useSocket();
+  const [localRoom, setLocalRoom] = useState('');
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRoom(event.target.value);
+    setLocalRoom(event.target.value);
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // if (username) {
-    joinRoom(room);
+    joinRoom(localRoom);
     // } else {
     //   console.log('username not found');
     // }
@@ -122,11 +136,11 @@ function ResponsiveDrawer(props: Props) {
         >
           <form style={rootStyle} onSubmit={handleSubmit}>
             <TextField
-              id="room"
+              id="localroom"
               type="text"
-              name="room"
+              name="localroom"
               label="Create a room"
-              value={room}
+              value={localRoom}
               onChange={handleChange}
               sx={{
                 '& .MuiInputBase-input': {
@@ -156,17 +170,19 @@ function ResponsiveDrawer(props: Props) {
           items={[
             {
               title: 'Join a room',
-              children: ['Kodsnack', 'TheRockiRock', 'Bumpy Monster'],
+              children: allRooms ?? [],
             },
           ]}
+          joinRoom={joinRoom}
         />
         <NestedList
           items={[
             {
-              title: 'Users online',
-              children: ['Nathalie', 'Sebastian', 'Lisa Marie'],
+              title: 'Users',
+              children: ['Björne', 'Snigel'],
             },
           ]}
+          joinRoom={joinRoom}
         />
         <NestedList
           items={[
@@ -175,6 +191,7 @@ function ResponsiveDrawer(props: Props) {
               children: ['Nathalie', 'Sebastian', 'Emil', 'Gabriel'],
             },
           ]}
+          joinRoom={joinRoom}
         />
       </List>
     </div>
