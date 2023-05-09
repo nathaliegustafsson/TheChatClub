@@ -1,10 +1,10 @@
-import { Box, Button, Container, TextField } from "@mui/material";
+import { Box, Button, TextField } from "@mui/material";
 import { useState } from "react";
 import { useSocket } from "../context/SocketContext";
 
 function ChatWindow() {
   const [message, setMessage] = useState("");
-  const { sendMessage, messages } = useSocket();
+  const { sendMessage, messages, username } = useSocket();
 
   const handlesubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -13,19 +13,45 @@ function ChatWindow() {
   };
 
   return (
-    <Container
+    <Box
       sx={{
         display: "flex",
         flexDirection: "column",
         height: "83vh",
       }}
     >
-      <h1>The Chat</h1>
-      <ul>
+      <ul
+        style={{
+          margin: 0,
+          marginTop: "0.5rem",
+          padding: 0,
+        }}
+      >
         {messages.map((message, i) => (
-          <li key={i} style={{ color: "black" }}>
-            {message.username}: {message.message}
-          </li>
+          <div
+            key={i}
+            style={{
+              display: "flex",
+              justifyContent:
+                username === message.username ? "flex-end" : "flex-start",
+            }}
+          >
+            <li
+              style={{
+                display: "flex",
+                color: "black",
+                backgroundColor:
+                  username === message.username ? "#FFEAFA" : "#CDDDF4",
+                borderRadius: "20rem",
+                padding: "0.5rem",
+                listStyle: "none",
+                marginBottom: "0.8rem",
+                height: "auto",
+              }}
+            >
+              {message.username}: {message.message}
+            </li>
+          </div>
         ))}
       </ul>
       <Box
@@ -69,7 +95,7 @@ function ChatWindow() {
           </Button>
         </form>
       </Box>
-    </Container>
+    </Box>
   );
 }
 
