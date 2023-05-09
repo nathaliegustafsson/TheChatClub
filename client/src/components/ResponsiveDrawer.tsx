@@ -22,7 +22,7 @@ import { useState } from "react";
 import { useSocket } from "../context/SocketContext";
 import ChatWindow from "./ChatWindow";
 
-const drawerWidth = 240;
+const drawerWidth = 280;
 
 interface Props {
   window?: () => Window;
@@ -94,12 +94,7 @@ function ResponsiveDrawer(props: Props) {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // if (username) {
     joinRoom(localRoom);
-    // } else {
-    //   console.log('username not found');
-    // }
-    // navigate('/chat');
   };
 
   const handleDrawerToggle = () => {
