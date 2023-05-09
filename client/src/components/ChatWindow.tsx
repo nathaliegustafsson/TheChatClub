@@ -102,7 +102,7 @@ function ChatWindow() {
           style={{
             display: "flex",
             flex: 1,
-            marginBottom: "1rem",
+            marginBottom: "0.5rem",
             marginTop: "1rem",
           }}
         >
