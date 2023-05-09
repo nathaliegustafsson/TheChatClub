@@ -1,10 +1,10 @@
-import { Box, Button, Container, TextField } from "@mui/material";
+import { Avatar, Box, Button, TextField } from "@mui/material";
 import { useState } from "react";
 import { useSocket } from "../context/SocketContext";
 
 function ChatWindow() {
   const [message, setMessage] = useState("");
-  const { sendMessage, messages } = useSocket();
+  const { sendMessage, messages, username } = useSocket();
 
   const handlesubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -13,19 +13,84 @@ function ChatWindow() {
   };
 
   return (
-    <Container
+    <Box
       sx={{
         display: "flex",
         flexDirection: "column",
-        height: "83vh",
+        flexGrow: 1,
+        height: "82vh",
       }}
     >
-      <h1>The Chat</h1>
-      <ul>
+      <ul
+        style={{
+          margin: 0,
+          marginTop: "0.5rem",
+          padding: 0,
+          overflowY: "scroll",
+        }}
+      >
         {messages.map((message, i) => (
-          <li key={i} style={{ color: "black" }}>
-            {message.username}: {message.message}
-          </li>
+          <div
+            key={i}
+            style={{
+              display: "flex",
+              justifyContent:
+                username === message.username ? "flex-end" : "flex-start",
+              marginRight: "2rem",
+            }}
+          >
+            <li
+              style={{
+                display: "flex",
+                color: "black",
+                listStyle: "none",
+                alignItems: "center",
+              }}
+            >
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent:
+                      username === message.username ? "flex-end" : "flex-start",
+                  }}
+                >
+                  <Avatar
+                    alt="Remy Sharp"
+                    src="./lilafigur.png/"
+                    sx={{ marginRight: "0.9rem", marginBottom: "0.5rem" }}
+                  />
+                  <p
+                    style={{
+                      color: "black",
+                      margin: 0,
+                      marginBottom: "0.3rem",
+                      fontSize: "0.95rem",
+                      textAlign: "left",
+                    }}
+                  >
+                    {message.username}
+                  </p>
+                </div>
+                <div style={{ marginLeft: "3.1rem" }}>
+                  <div
+                    style={{
+                      backgroundColor:
+                        username === message.username ? "#FFEAFA" : "#CDDDF4",
+                      borderRadius: "2rem",
+                      padding: "0.7rem",
+                      marginBottom: "0.8rem",
+                      height: "auto",
+                      maxWidth: "20rem",
+                    }}
+                  >
+                    {message.message}
+                  </div>
+                </div>
+              </div>
+            </li>
+          </div>
         ))}
       </ul>
       <Box
@@ -35,7 +100,15 @@ function ChatWindow() {
           flex: 1,
         }}
       >
-        <form onSubmit={handlesubmit} style={{ display: "flex", flex: 1 }}>
+        <form
+          onSubmit={handlesubmit}
+          style={{
+            display: "flex",
+            flex: 1,
+            marginBottom: "0.5rem",
+            marginTop: "1rem",
+          }}
+        >
           <TextField
             id="outlined-messages-input"
             name="messages"
@@ -69,7 +142,7 @@ function ChatWindow() {
           </Button>
         </form>
       </Box>
-    </Container>
+    </Box>
   );
 }
 

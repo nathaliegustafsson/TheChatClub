@@ -19,6 +19,7 @@ html, body, #root, main {
   background: #08162C;
 }
 
+
 ::-webkit-scrollbar-thumb {
   background: #FFEAFA;
   border-radius: 80rem;
@@ -26,4 +27,17 @@ html, body, #root, main {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #FFC9F3;
+}
+
+ul::-webkit-scrollbar-track {
+  background-color: #FFFFFF;
+}
+
+ul::-webkit-scrollbar-thumb {
+  background: #ECECEC;
+  border-radius: 80rem;
+}
+
+ul::-webkit-scrollbar-thumb:hover {
+  background: rgb(218, 215, 215);
 }

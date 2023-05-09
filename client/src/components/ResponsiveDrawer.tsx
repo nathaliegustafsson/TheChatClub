@@ -97,6 +97,7 @@ function ResponsiveDrawer(props: Props) {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     joinRoom(localRoom);
+    setLocalRoom("");
   };
 
   const handleDrawerToggle = () => {
