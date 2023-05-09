@@ -1,16 +1,21 @@
 import { Avatar, Box, Button, TextField } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSocket } from "../context/SocketContext";
 
 function ChatWindow() {
   const [message, setMessage] = useState("");
-  const { sendMessage, messages, username } = useSocket();
+  const { sendMessage, messages, username, room, setMessages } = useSocket();
 
   const handlesubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     sendMessage(message);
     setMessage("");
   };
+
+  useEffect(() => {
+    // Clear messages when the room changes
+    setMessages([]);
+  }, [room]);
 
   return (
     <Box
