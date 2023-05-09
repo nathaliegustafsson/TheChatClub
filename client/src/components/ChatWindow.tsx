@@ -4,7 +4,7 @@ import { useSocket } from "../context/SocketContext";
 
 function ChatWindow() {
   const [message, setMessage] = useState("");
-  const { sendMessage, messages } = useSocket();
+  const { sendMessage, messages, room } = useSocket();
 
   const handlesubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -19,7 +19,7 @@ function ChatWindow() {
         flexDirection: "column",
         height: "83vh",
       }}>
-      {messages.length === 0 ? (
+      {room === "" ? (
         <img
           src="/src/assets/yellowmailbox.png"
           alt="No active chat"
