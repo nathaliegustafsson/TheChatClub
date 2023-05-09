@@ -18,7 +18,7 @@ function ChatWindow() {
         display: "flex",
         flexDirection: "column",
         flexGrow: 1,
-        height: "83vh",
+        height: "82vh",
       }}
     >
       <ul
