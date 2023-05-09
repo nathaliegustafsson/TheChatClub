@@ -111,12 +111,13 @@ function ResponsiveDrawer(props: Props) {
         backgroundImage: `url(${background})`,
       }}>
       <Toolbar />
-      <Typography
+      {/* <Typography
         variant="body2"
         sx={{ fontSize: "2rem", marginBottom: "-1rem" }}>
         The
       </Typography>
-      <Typography variant="h4">CHAT CLUB</Typography>
+      <Typography variant="h4">CHAT CLUB</Typography> */}
+      <img src="/src/assets/logo.png" alt="The Chat Club" style={imageStyle} />
       <Typography
         variant="h5"
         sx={{ marginBottom: "1rem", marginTop: "1.5rem" }}>
@@ -280,6 +281,10 @@ const rootStyle: React.CSSProperties = {
   flexDirection: "column",
   gap: "0.5rem",
   width: "100%",
+};
+
+const imageStyle: React.CSSProperties = {
+  height: "9rem",
 };
 
 export default ResponsiveDrawer;

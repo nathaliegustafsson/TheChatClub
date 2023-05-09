@@ -8,7 +8,7 @@ function Title() {
         padding: "0px !important",
       }}>
       <Box>
-        <Typography
+        {/* <Typography
           variant="body2"
           fontSize={"3.5rem"}
           marginBottom={"-1.5rem"}
@@ -17,7 +17,8 @@ function Title() {
         </Typography>
         <Typography variant="h3" color={theme.palette.text.primary}>
           CHAT CLUB
-        </Typography>
+        </Typography> */}
+        <img src="/src/assets/logo.png" alt="" />
       </Box>
       <Box>
         <Typography
