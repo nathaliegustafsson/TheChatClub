@@ -44,24 +44,42 @@ function ChatWindow() {
                 alignItems: "center",
               }}
             >
-              <div style={{ display: "flex" }}>
-                <Avatar
-                  alt="Remy Sharp"
-                  src="./lilafigur.png/"
-                  sx={{ marginRight: "0.9rem" }}
-                />
-                <div>
-                  <p style={{ color: "black", margin: 0, marginBottom: "0.3rem", fontSize: "0.95rem" }}>
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent:
+                      username === message.username ? "flex-end" : "flex-start",
+                  }}
+                >
+                  <Avatar
+                    alt="Remy Sharp"
+                    src="./lilafigur.png/"
+                    sx={{ marginRight: "0.9rem", marginBottom: "0.5rem" }}
+                  />
+                  <p
+                    style={{
+                      color: "black",
+                      margin: 0,
+                      marginBottom: "0.3rem",
+                      fontSize: "0.95rem",
+                      textAlign: "left",
+                    }}
+                  >
                     {message.username}
                   </p>
+                </div>
+                <div style={{ marginLeft: "3.1rem" }}>
                   <div
                     style={{
                       backgroundColor:
                         username === message.username ? "#FFEAFA" : "#CDDDF4",
-                      borderRadius: "20rem",
-                      padding: "0.5rem",
+                      borderRadius: "2rem",
+                      padding: "0.7rem",
                       marginBottom: "0.8rem",
                       height: "auto",
+                      maxWidth: "20rem",
                     }}
                   >
                     {message.message}
@@ -79,7 +97,15 @@ function ChatWindow() {
           flex: 1,
         }}
       >
-        <form onSubmit={handlesubmit} style={{ display: "flex", flex: 1 }}>
+        <form
+          onSubmit={handlesubmit}
+          style={{
+            display: "flex",
+            flex: 1,
+            marginBottom: "1rem",
+            marginTop: "1rem",
+          }}
+        >
           <TextField
             id="outlined-messages-input"
             name="messages"
