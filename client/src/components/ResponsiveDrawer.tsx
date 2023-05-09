@@ -134,10 +134,12 @@ function ResponsiveDrawer(props: Props) {
               onChange={handleChange}
               sx={{
                 "& .MuiInputBase-input": {
-                  bgcolor: "#ECECEC",
+                  width: "70%",
+                  bgcolor: "#FFFFFF",
                   borderRadius: "20rem",
                   color: (theme) => theme.palette.text.secondary,
                   fontFamily: (theme) => theme.typography.body1,
+                  height: "0.5rem",
                 },
                 "& .MuiOutlinedInput-notchedOutline": {
                   border: "none",
@@ -147,7 +149,7 @@ function ResponsiveDrawer(props: Props) {
               variant="contained"
               type="submit"
               sx={{
-                width: "70%",
+                width: "60%",
                 fontSize: "1rem",
               }}>
               Create a room
