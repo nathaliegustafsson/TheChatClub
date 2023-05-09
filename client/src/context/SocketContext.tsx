@@ -43,6 +43,7 @@ function SocketProvider({ children }: PropsWithChildren) {
   const joinRoom = (room: string) => {
     socket.emit("join", room, () => {
       setRoom(room);
+      setMessages([]); // Clear messages when joining a new room
     });
   };
 
