@@ -21,7 +21,7 @@ function ChatWindow() {
       }}>
       {room === "" ? (
         <img
-          src="/src/assets/yellowmailbox.png"
+          src="/src/assets/yellowmailboxroom.png"
           alt="No active chat"
           style={{ width: "100%", height: "100%", objectFit: "contain" }}
         />
