@@ -1,7 +1,7 @@
 import { Box, Container } from "@mui/material";
 import { CSSProperties } from "react";
 import StartInfo from "./StartInfo.";
-import background from "/src/assets/starsky.png";
+import background from "/src/assets/gifstarbig.gif";
 
 function StartView() {
   return (
