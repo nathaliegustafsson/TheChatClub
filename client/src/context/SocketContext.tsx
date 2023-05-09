@@ -6,17 +6,18 @@ import {
   useContext,
   useEffect,
   useState,
-} from 'react';
-import { io } from 'socket.io-client';
-import type { Message } from '../../../server/communication';
+} from "react";
+import { io } from "socket.io-client";
+import type { Message } from "../../../server/communication";
 export interface ContextValues {
   joinRoom: (room: string) => void;
   sendMessage: (message: string) => void;
   room?: string;
   setRoom?: Dispatch<SetStateAction<string | undefined>>;
   allRooms?: string[];
-  setAllRooms?: string[];
+  setAllRooms?: Dispatch<SetStateAction<string[] | undefined>>;
   messages: Message[];
+  setMessages: Dispatch<SetStateAction<Message[]>>;
   saveUsername: (username: string) => void;
   username?: string;
   leaveRoom: (room: string) => void;
@@ -32,38 +33,38 @@ function SocketProvider({ children }: PropsWithChildren) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [room, setRoom] = useState<string>();
   const [allRooms, setAllRooms] = useState<string[]>();
-  // const [rooms, setRooms] = useState<string>();
 
   const saveUsername = (username: string) => {
-    socket.emit('username', username, () => {
+    socket.emit("username", username, () => {
       setUsername(username);
     });
   };
 
   const joinRoom = (room: string) => {
-    socket.emit('join', room, () => {
+    socket.emit("join", room, () => {
       setRoom(room);
     });
   };
 
   const leaveRoom = (room: string) => {
-    socket.emit('leave', room, () => {
-      setRoom('');
-      console.log('LÄMNAR RUM');
+    socket.emit("leave", room, () => {
+      setRoom("");
+      console.log("LÄMNAR RUM");
     });
   };
 
   const sendMessage = (message: string) => {
     if (!room) throw Error("Can't send message without a room");
-    socket.emit('message', room, message);
+    socket.emit("message", room, message);
+    console.log(room, message);
   };
 
   useEffect(() => {
     function connect() {
-      console.log('Connected to server');
+      console.log("Connected to server");
     }
     function disconnect() {
-      console.log('Disconnected from the server');
+      console.log("Disconnected from the server");
     }
     function message(username: string, message: string) {
       console.log(username, message);
@@ -77,23 +78,23 @@ function SocketProvider({ children }: PropsWithChildren) {
       console.log(username);
     }
     function leave() {
-      console.log('left room');
+      console.log("left room");
     }
 
-    socket.on('connect', connect);
-    socket.on('disconnect', disconnect);
-    socket.on('message', message);
-    socket.on('rooms', rooms);
-    socket.on('username', username);
-    socket.on('leave', leave);
+    socket.on("connect", connect);
+    socket.on("disconnect", disconnect);
+    socket.on("message", message);
+    socket.on("rooms", rooms);
+    socket.on("username", username);
+    socket.on("leave", leave);
 
     return () => {
-      socket.off('connect', connect);
-      socket.off('disconnect', disconnect);
-      socket.off('message', message);
-      socket.off('rooms', rooms);
-      socket.off('username', username);
-      socket.off('leave', leave);
+      socket.off("connect", connect);
+      socket.off("disconnect", disconnect);
+      socket.off("message", message);
+      socket.off("rooms", rooms);
+      socket.off("username", username);
+      socket.off("leave", leave);
     };
   }, []);
 
@@ -106,8 +107,10 @@ function SocketProvider({ children }: PropsWithChildren) {
         room,
         setRoom,
         messages,
+        setMessages,
         username,
         allRooms,
+        setAllRooms,
         leaveRoom,
       }}
     >
