@@ -1,4 +1,4 @@
-import { Box, Button, TextField } from "@mui/material";
+import { Avatar, Box, Button, TextField } from "@mui/material";
 import { useState } from "react";
 import { useSocket } from "../context/SocketContext";
 
@@ -40,16 +40,34 @@ function ChatWindow() {
               style={{
                 display: "flex",
                 color: "black",
-                backgroundColor:
-                  username === message.username ? "#FFEAFA" : "#CDDDF4",
-                borderRadius: "20rem",
-                padding: "0.5rem",
                 listStyle: "none",
-                marginBottom: "0.8rem",
-                height: "auto",
+                alignItems: "center",
               }}
             >
-              {message.username}: {message.message}
+              <div style={{ display: "flex" }}>
+                <Avatar
+                  alt="Remy Sharp"
+                  src="./lilafigur.png/"
+                  sx={{ marginRight: "0.9rem" }}
+                />
+                <div>
+                  <p style={{ color: "black", margin: 0, marginBottom: "0.3rem", fontSize: "0.95rem" }}>
+                    {message.username}
+                  </p>
+                  <div
+                    style={{
+                      backgroundColor:
+                        username === message.username ? "#FFEAFA" : "#CDDDF4",
+                      borderRadius: "20rem",
+                      padding: "0.5rem",
+                      marginBottom: "0.8rem",
+                      height: "auto",
+                    }}
+                  >
+                    {message.message}
+                  </div>
+                </div>
+              </div>
             </li>
           </div>
         ))}
