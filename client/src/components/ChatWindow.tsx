@@ -17,6 +17,7 @@ function ChatWindow() {
       sx={{
         display: "flex",
         flexDirection: "column",
+        flexGrow: 1,
         height: "83vh",
       }}
     >
@@ -25,6 +26,8 @@ function ChatWindow() {
           margin: 0,
           marginTop: "0.5rem",
           padding: 0,
+          overflowY: "scroll",
+          
         }}
       >
         {messages.map((message, i) => (
@@ -34,6 +37,7 @@ function ChatWindow() {
               display: "flex",
               justifyContent:
                 username === message.username ? "flex-end" : "flex-start",
+                marginRight: "2rem"
             }}
           >
             <li
