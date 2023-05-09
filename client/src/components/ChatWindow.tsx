@@ -4,12 +4,14 @@ import { useSocket } from "../context/SocketContext";
 
 function ChatWindow() {
   const [message, setMessage] = useState("");
+  const [showImage, setShowImage] = useState(true);
   const { sendMessage, messages, room } = useSocket();
 
-  const handlesubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSendMessage = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     sendMessage(message);
     setMessage("");
+    setShowImage(false);
   };
 
   return (
@@ -23,10 +25,17 @@ function ChatWindow() {
         <img
           src="/src/assets/yellowmailboxroom.png"
           alt="No active chat"
-          style={{ width: "100%", height: "100%", objectFit: "contain" }}
+          style={{ width: "80%", height: "80%", objectFit: "contain" }}
         />
       ) : (
         <>
+          {showImage && (
+            <img
+              src="/src/assets/NoMessages.png"
+              alt="No messages"
+              style={{ width: "80%", height: "80%", objectFit: "contain" }}
+            />
+          )}
           <h1>The Chat</h1>
           <ul>
             {messages.map((message, i) => (
@@ -41,7 +50,9 @@ function ChatWindow() {
               alignItems: "flex-end",
               flex: 1,
             }}>
-            <form onSubmit={handlesubmit} style={{ display: "flex", flex: 1 }}>
+            <form
+              onSubmit={handleSendMessage}
+              style={{ display: "flex", flex: 1 }}>
               <TextField
                 id="outlined-messages-input"
                 name="messages"
