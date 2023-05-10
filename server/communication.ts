@@ -3,6 +3,7 @@ export interface ServerToClientEvents {
   rooms: (rooms: string[]) => void;
   typing: (typingUsers: string[]) => void;
   users: (users: { userID: string; username: string }[]) => void;
+  'update room users': (users: string[]) => void;
 }
 
 export interface ClientToServerEvents {
