@@ -1,5 +1,7 @@
 import {
+  Dispatch,
   PropsWithChildren,
+  SetStateAction,
   createContext,
   useContext,
   useEffect,
@@ -10,14 +12,18 @@ import type { Message } from "../../../server/communication";
 export interface ContextValues {
   joinRoom: (room: string) => void;
   sendMessage: (message: string) => void;
-  room?: string;
-  setRoom?: (room: string) => void;
+  room: string;
+  setRoom?: Dispatch<SetStateAction<string>>;
   allRooms?: string[];
   setAllRooms?: string[];
   messages: Message[];
   saveUsername: (username: string) => void;
-  username?: string;
+  username: string;
   leaveRoom: (room: string) => void;
+  isTyping: boolean;
+  setIsTyping: Dispatch<SetStateAction<boolean>>;
+  typing: (room: string, username: string, isTyping: boolean) => void;
+  typingUserState: string[];
 }
 
 const socket = io();
@@ -26,11 +32,12 @@ const SocketContext = createContext<ContextValues>(null as any);
 export const useSocket = () => useContext(SocketContext);
 
 function SocketProvider({ children }: PropsWithChildren) {
-  const [username, setUsername] = useState<string>();
+  const [username, setUsername] = useState<string>("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [room, setRoom] = useState<string>("");
   const [allRooms, setAllRooms] = useState<string[]>();
-  // const [rooms, setRooms] = useState<string>();
+  const [isTyping, setIsTyping] = useState(false);
+  const [typingUserState, setTypingUserState] = useState<string[]>([]);
 
   const saveUsername = (username: string) => {
     socket.emit("username", username, () => {
@@ -56,6 +63,14 @@ function SocketProvider({ children }: PropsWithChildren) {
     socket.emit("message", room, message);
   };
 
+  const typing = (room: string, username: string, isTyping: boolean) => {
+    socket.emit("typing", room, username, isTyping);
+  };
+
+  const typingCli = (typingUsers: string[]) => {
+    setTypingUserState(typingUsers);
+  };
+
   useEffect(() => {
     function connect() {
       console.log("Connected to server");
@@ -68,7 +83,6 @@ function SocketProvider({ children }: PropsWithChildren) {
       setMessages((messages) => [...messages, { username, message }]);
     }
     function rooms(rooms: string[]) {
-      console.log(rooms);
       setAllRooms(rooms);
     }
     function username(username: string) {
@@ -84,6 +98,7 @@ function SocketProvider({ children }: PropsWithChildren) {
     socket.on("rooms", rooms);
     socket.on("username", username);
     socket.on("leave", leave);
+    socket.on("typing", typingCli);
 
     return () => {
       socket.off("connect", connect);
@@ -107,6 +122,10 @@ function SocketProvider({ children }: PropsWithChildren) {
         username,
         allRooms,
         leaveRoom,
+        typing,
+        isTyping,
+        setIsTyping,
+        typingUserState,
       }}>
       {children}
     </SocketContext.Provider>

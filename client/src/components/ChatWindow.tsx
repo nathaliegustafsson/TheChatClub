@@ -1,17 +1,54 @@
 import { Avatar, Box, Button, TextField } from "@mui/material";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useSocket } from "../context/SocketContext";
 
 function ChatWindow() {
   const [message, setMessage] = useState("");
   const [showImage, setShowImage] = useState(true);
-  const { sendMessage, messages, username, room } = useSocket();
+
+  const {
+    sendMessage,
+    messages,
+    isTyping,
+    setIsTyping,
+    typing,
+    username,
+    room,
+    typingUserState,
+  } = useSocket();
+  let prevTypingValue = false;
+
+  const timerRef = useRef<number>();
+
+  function handleTyping(e: any) {
+    setMessage(e.target.value);
+
+    if (!isTyping) {
+      setIsTyping(true);
+      typing(room, username, true);
+    } else if (message.length < 1) {
+      clearTimeout(timerRef.current);
+      typing(room, username, false);
+      setIsTyping(false);
+    } else {
+      clearTimeout(timerRef.current);
+      timerRef.current = setTimeout(() => {
+        setIsTyping(false);
+        typing(room, username, false);
+      }, 5000);
+    }
+  }
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     sendMessage(message);
     setMessage("");
     setShowImage(false);
+    if (isTyping) {
+      clearTimeout(timerRef.current);
+      typing(room, username, false);
+      setIsTyping(false);
+    }
   };
 
   return (
