@@ -16,6 +16,7 @@ const io = new Server<
   SocketData
 >();
 
+const roomUsers: { [room: string]: string[] } = {};
 let typingUsers: string[] = [];
 
 const DB = 'thechatclub';
@@ -56,6 +57,21 @@ const main = async () => {
     console.log('a user connected');
     socket.emit('users', getConnectedUsers());
 
+    socket.on('disconnect', () => {
+      console.log('a user disconnected');
+
+      // Remove the user from all rooms
+      for (const roomId in roomUsers) {
+        roomUsers[roomId] = roomUsers[roomId].filter(
+          (user) => user !== socket.data.username
+        );
+        io.to(roomId).emit('update room users', roomUsers[roomId]);
+      }
+
+      // Update the connected users list
+      io.emit('users', getConnectedUsers());
+    });
+
     socket.on('typing', (room, username, isTyping) => {
       if (isTyping && !typingUsers.includes(username)) {
         typingUsers.push(username);
@@ -75,12 +91,33 @@ const main = async () => {
       // Leave all rooms before entering a new one.
       for (const roomId of socket.rooms) {
         if (roomId !== socket.id) {
+          // Remove the user from the previous room's user list
+          roomUsers[roomId] = roomUsers[roomId].filter(
+            (user) => user !== socket.data.username
+          );
+
+          // Emit the updated user list for the previous room
+          io.to(roomId).emit('update room users', roomUsers[roomId]);
+
           socket.leave(roomId);
         }
       }
+
+      // Add the user to the new room's user list
+      if (!roomUsers[room]) {
+        roomUsers[room] = [];
+      }
+      if (socket.data.username) {
+        roomUsers[room].push(socket.data.username);
+      }
+
+      // Emit the updated user list for the new room
+      io.to(room).emit('update room users', roomUsers[room]);
+
       socket.join(room);
       console.log(socket.rooms);
       ack();
+      io.emit('users', getConnectedUsers());
       // When a user joins a room, send an updated list of rooms to everyone
       io.emit('rooms', getRooms());
     });
@@ -88,6 +125,17 @@ const main = async () => {
     // Leave room
     socket.on('leave', (room, ack) => {
       socket.leave(room);
+      // Remove the user from the room's user list
+      if (roomUsers[room]) {
+        roomUsers[room] = roomUsers[room].filter(
+          (user) => user !== socket.data.username
+        );
+      } else {
+        roomUsers[room] = [];
+      }
+
+      // Emit the updated user list for the room
+      io.to(room).emit('update room users', roomUsers[room]);
       ack();
       io.emit('rooms', getRooms());
     });
@@ -107,9 +155,10 @@ function getRooms() {
   const { rooms } = io.sockets.adapter;
   const roomsFound: string[] = [];
 
-  for (const [username, setOfSocketIds] of rooms) {
-    if (!setOfSocketIds.has(username)) {
-      roomsFound.push(username);
+  for (const [roomId, setOfSocketIds] of rooms) {
+    const [socketId] = [...setOfSocketIds]; // Get the first socket ID in the set
+    if (roomId !== socketId) {
+      roomsFound.push(roomId);
     }
   }
   return roomsFound;
