@@ -42,14 +42,17 @@ const main = async () => {
 
   io.adapter(createAdapter(mongoCollection));
 
+  io.use((socket, next) => {
+    const username = socket.handshake.auth.username;
+    if (!username) {
+      return next(new Error('invalid username'));
+    }
+    socket.data.username = username;
+    next();
+  });
+
   io.on('connection', (socket) => {
     console.log('a user connected');
-
-    socket.on('username', (username, ack) => {
-      socket.data.username = username;
-      console.log(username);
-      ack();
-    });
 
     socket.on('typing', (room, username, isTyping) => {
       if (isTyping && !typingUsers.includes(username)) {
