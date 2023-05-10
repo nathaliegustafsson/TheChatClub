@@ -3,6 +3,7 @@ import { MongoClient } from 'mongodb';
 import { Server } from 'socket.io';
 import type {
   ClientToServerEvents,
+  ConnectedUser,
   InterServerEvents,
   ServerToClientEvents,
   SocketData,
@@ -42,14 +43,18 @@ const main = async () => {
 
   io.adapter(createAdapter(mongoCollection));
 
+  io.use((socket, next) => {
+    const username = socket.handshake.auth.username;
+    if (!username) {
+      return next(new Error('invalid username'));
+    }
+    socket.data.username = username;
+    next();
+  });
+
   io.on('connection', (socket) => {
     console.log('a user connected');
-
-    socket.on('username', (username, ack) => {
-      socket.data.username = username;
-      console.log(username);
-      ack();
-    });
+    socket.emit('users', getConnectedUsers());
 
     socket.on('typing', (room, username, isTyping) => {
       if (isTyping && !typingUsers.includes(username)) {
@@ -108,4 +113,17 @@ function getRooms() {
     }
   }
   return roomsFound;
+}
+
+function getConnectedUsers(): ConnectedUser[] {
+  const users: ConnectedUser[] = [];
+  for (let [id, connectedSocket] of io.of('/').sockets) {
+    if (connectedSocket.data.username) {
+      users.push({
+        userID: id,
+        username: connectedSocket.data.username,
+      });
+    }
+  }
+  return users;
 }
