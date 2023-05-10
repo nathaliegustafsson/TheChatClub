@@ -18,7 +18,7 @@ function Title() {
         <Typography variant="h3" color={theme.palette.text.primary}>
           CHAT CLUB
         </Typography> */}
-        <img src="/src/assets/logo.png" alt="" />
+        <img src="/src/assets/logo.png" alt="" style={imageStyle} />
       </Box>
       <Box>
         <Typography
@@ -31,5 +31,9 @@ function Title() {
     </Box>
   );
 }
+
+const imageStyle: React.CSSProperties = {
+  height: "12rem",
+};
 
 export default Title;
