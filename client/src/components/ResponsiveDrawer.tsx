@@ -40,6 +40,7 @@ function NestedList(props: {
   listItems?: ConnectedUser[];
 }) {
   const [open, setOpen] = React.useState(true);
+  const [connectedUsers, setConnectedUsers] = useState<ConnectedUser[]>([]);
 
   const handleClick = () => {
     setOpen(!open);
@@ -52,6 +53,11 @@ function NestedList(props: {
       props.joinRoom(localRoom);
     }
   };
+
+  React.useEffect(() => {
+    setConnectedUsers(props.listItems || []);
+  }, [props.listItems]);
+
   return (
     <React.Fragment>
       {props.items.map((item, index) => (
@@ -98,8 +104,15 @@ function NestedList(props: {
 function ResponsiveDrawer(props: Props) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { joinRoom, username, allRooms, room, leaveRoom, connectedUsers } =
-    useSocket();
+  const {
+    joinRoom,
+    username,
+    allRooms,
+    room,
+    leaveRoom,
+    connectedUsers,
+    roomUsers,
+  } = useSocket();
   const [localRoom, setLocalRoom] = useState('');
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -238,7 +251,7 @@ function ResponsiveDrawer(props: Props) {
             menu
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            {room}
+            {room} Users in this room: {roomUsers.join(', ')}
           </Typography>
           <IconButton
             className="material-symbols-outlined"
