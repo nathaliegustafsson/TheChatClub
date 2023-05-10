@@ -23,7 +23,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("message", (room, message) => {
-    io.to(room).emit("message", socket.data.username!, message, room);
+    io.to(room).emit("message", socket.data.username!, message);
     console.log(room, socket.data.username, message);
   });
 
