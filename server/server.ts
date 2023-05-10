@@ -54,17 +54,17 @@ const main = async () => {
   io.on('connection', (socket) => {
     console.log('a user connected');
 
-    // const users = [];
-    // for (let [id, socket] of io.of('/').sockets) {
-    //   if (socket.data.username) {
-    //     users.push({
-    //       userID: id,
-    //       username: socket.data.username,
-    //     });
-    //   }
-    // }
-
+    const users: { userID: string; username: string }[] = [];
+    for (let [id, socket] of io.of('/').sockets) {
+      if (socket.data.username) {
+        users.push({
+          userID: id,
+          username: socket.data.username,
+        });
+      }
+    }
     socket.emit('users', users);
+
     socket.on('typing', (room, username, isTyping) => {
       if (isTyping && !typingUsers.includes(username)) {
         typingUsers.push(username);
