@@ -29,7 +29,7 @@ io.on('connection', (socket) => {
 
   socket.on('join', (room, ack) => {
     // Leave all rooms before entering a new one.
-    for (const roomId in socket.rooms) {
+    for (const roomId of socket.rooms) {
       if (roomId !== socket.id) {
         socket.leave(roomId);
       }
