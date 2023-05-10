@@ -25,6 +25,7 @@ export interface ContextValues {
   typing: (room: string, username: string, isTyping: boolean) => void;
   typingUserState: string[];
   connectedUsers: ConnectedUser[];
+  roomUsers: string[];
 }
 
 let socket = io({ autoConnect: false });
@@ -40,6 +41,7 @@ function SocketProvider({ children }: PropsWithChildren) {
   const [isTyping, setIsTyping] = useState(false);
   const [typingUserState, setTypingUserState] = useState<string[]>([]);
   const [connectedUsers, setConnectedUsers] = useState<ConnectedUser[]>([]);
+  const [roomUsers, setRoomUsers] = useState<string[]>([]);
 
   const updateSocketWithAuth = (username: string) => {
     socket.auth = { username };
@@ -111,6 +113,9 @@ function SocketProvider({ children }: PropsWithChildren) {
     function users(users: ConnectedUser[]) {
       updateConnectedUsers(users);
     }
+    function updateRoomUsers(users: string[]) {
+      setRoomUsers(users);
+    }
 
     socket.on('connect', connect);
     socket.on('disconnect', disconnect);
@@ -120,6 +125,7 @@ function SocketProvider({ children }: PropsWithChildren) {
     socket.on('leave', leave);
     socket.on('typing', typingCli);
     socket.on('users', users);
+    socket.on('update room users', updateRoomUsers);
 
     return () => {
       socket.off('connect', connect);
@@ -129,6 +135,7 @@ function SocketProvider({ children }: PropsWithChildren) {
       socket.off('username', username);
       socket.off('leave', leave);
       socket.off('users', users);
+      socket.off('update room users', updateRoomUsers);
     };
   }, []);
 
@@ -149,6 +156,7 @@ function SocketProvider({ children }: PropsWithChildren) {
         setIsTyping,
         typingUserState,
         connectedUsers,
+        roomUsers,
       }}
     >
       {children}
