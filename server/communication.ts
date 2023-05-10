@@ -1,6 +1,7 @@
 export interface ServerToClientEvents {
   message: (username: string, message: string) => void;
   rooms: (rooms: string[]) => void;
+  typing: (typingUsers: string[]) => void;
 }
 
 export interface ClientToServerEvents {
@@ -8,6 +9,7 @@ export interface ClientToServerEvents {
   join: (room: string, ack: () => void) => void;
   username: (username: string, ack: () => void) => void;
   leave: (room: string, ack: () => void) => void;
+  typing: (room: string, username: string, isTyping: boolean) => void;
 }
 
 export interface InterServerEvents {

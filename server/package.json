@@ -1,6 +1,8 @@
 {
   "dependencies": {
+    "@socket.io/mongo-adapter": "^0.3.0",
     "@types/node": "^18.16.3",
+    "mongodb": "^5.4.0",
     "nodemon": "^2.0.22",
     "socket.io": "^4.6.1",
     "ts-node": "^10.9.1",
