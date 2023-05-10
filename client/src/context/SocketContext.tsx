@@ -9,6 +9,7 @@ import {
 } from 'react';
 import { io } from 'socket.io-client';
 import type { Message } from '../../../server/communication';
+
 export interface ContextValues {
   joinRoom: (room: string) => void;
   sendMessage: (message: string) => void;
@@ -27,7 +28,7 @@ export interface ContextValues {
   // setUsernameAlreadySelected: Dispatch<
   //   SetStateAction<SetStateAction<SetStateAction<boolean>>>
   // >;
-  onUsernameSelection: () => void;
+  // onUsernameSelection: () => void;
 }
 
 const socket = io({ autoConnect: false });
@@ -43,13 +44,11 @@ function SocketProvider({ children }: PropsWithChildren) {
   const [isTyping, setIsTyping] = useState(false);
   const [typingUserState, setTypingUserState] = useState<string[]>([]);
   const [allUsers, setAllUsers] = useState<string[]>([]);
-  // const [usernameAlreadySelected, setUsernameAlreadySelected] = useState(false);
+  const [usernameAlreadySelected, setUsernameAlreadySelected] = useState(false);
 
-  // function onUsernameSelection(username: string) {
-  //   setUsernameAlreadySelected(true);
-  //   socket.auth = { username };
-  //   socket.connect();
-  // }
+  function requestUsers() {
+    socket.emit('getUsers');
+  }
 
   // socket.on('connect_error', (err) => {
   //   if (err.message === 'invalid username') {
@@ -58,6 +57,7 @@ function SocketProvider({ children }: PropsWithChildren) {
   // });
 
   const saveUsername = (username: string) => {
+    setUsernameAlreadySelected(true);
     socket.emit('username', username, () => {
       setUsername(username);
     });
@@ -90,10 +90,6 @@ function SocketProvider({ children }: PropsWithChildren) {
     setTypingUserState(typingUsers);
   };
 
-  const requestUsers = () => {
-    socket.emit('getUsers');
-  };
-
   useEffect(() => {
     function connect() {
       console.log('Connected to server');
@@ -114,14 +110,7 @@ function SocketProvider({ children }: PropsWithChildren) {
     function leave() {
       console.log('left room');
     }
-    function requestUsers() {}
-
-    // function onUsernameSelection(username: string) {
-    //   setUsernameAlreadySelected(true);
-    //   socket.auth = { username };
-    //   socket.connect();
-    //   socket.emit('saveUser', username);
-    // }
+    requestUsers();
 
     socket.on('connect', connect);
     socket.on('disconnect', disconnect);
@@ -130,6 +119,10 @@ function SocketProvider({ children }: PropsWithChildren) {
     socket.on('username', username);
     socket.on('leave', leave);
     socket.on('typing', typingCli);
+    socket.on('username', username);
+    socket.on('users', (users: any[]) => {
+      setAllUsers(users);
+    });
 
     return () => {
       socket.off('connect', connect);

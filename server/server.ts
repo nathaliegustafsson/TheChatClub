@@ -19,6 +19,7 @@ let typingUsers: string[] = [];
 
 const DB = 'thechatclub';
 const COLLECTION = 'socket.io-adapter-events';
+const USERS_COLLECTION = 'users';
 
 const mongoClient = new MongoClient(
   'mongodb+srv://admin:HFVBXYix6KJWVRtn@thechatclub.uisbxj8.mongodb.net/?retryWrites=true&w=majority'
@@ -39,13 +40,17 @@ const main = async () => {
   const sessionsCollection = mongoClient
     .db(DB)
     .collection<SocketData>('sessions');
+  const usersCollection = mongoClient.db(DB).collection(USERS_COLLECTION);
 
   io.adapter(createAdapter(mongoCollection));
 
   io.on('connection', (socket) => {
     console.log('a user connected');
 
-    socket.on('username', (username, ack) => {
+    socket.on('username', async (username, ack) => {
+      const user = { username, socketID: socket.id };
+      await usersCollection.insertOne(user);
+
       socket.data.username = username;
       console.log(username);
       ack();
