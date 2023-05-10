@@ -6,9 +6,9 @@ import {
   useContext,
   useEffect,
   useState,
-} from "react";
-import { io } from "socket.io-client";
-import type { Message } from "../../../server/communication";
+} from 'react';
+import { io } from 'socket.io-client';
+import type { Message } from '../../../server/communication';
 export interface ContextValues {
   joinRoom: (room: string) => void;
   sendMessage: (message: string) => void;
@@ -26,46 +26,56 @@ export interface ContextValues {
   typingUserState: string[];
 }
 
-const socket = io();
+let socket = io({ autoConnect: false });
 
 const SocketContext = createContext<ContextValues>(null as any);
 export const useSocket = () => useContext(SocketContext);
 
 function SocketProvider({ children }: PropsWithChildren) {
-  const [username, setUsername] = useState<string>("");
+  const [username, setUsername] = useState<string>('');
   const [messages, setMessages] = useState<Message[]>([]);
-  const [room, setRoom] = useState<string>("");
+  const [room, setRoom] = useState<string>('');
   const [allRooms, setAllRooms] = useState<string[]>();
   const [isTyping, setIsTyping] = useState(false);
   const [typingUserState, setTypingUserState] = useState<string[]>([]);
 
+  const updateSocketWithAuth = (username: string) => {
+    socket.auth = { username };
+    socket.connect();
+  };
+
   const saveUsername = (username: string) => {
-    socket.emit("username", username, () => {
-      setUsername(username);
-    });
+    if (!socket.connected) {
+      updateSocketWithAuth(username);
+    } else {
+      socket.disconnect();
+      socket = io({ autoConnect: false });
+      updateSocketWithAuth(username);
+    }
+    setUsername(username);
   };
 
   const joinRoom = (room: string) => {
-    socket.emit("join", room, () => {
+    socket.emit('join', room, () => {
       setRoom(room);
       setMessages([]);
     });
   };
 
   const leaveRoom = (room: string) => {
-    socket.emit("leave", room, () => {
-      setRoom("");
-      console.log("LÄMNAR RUM");
+    socket.emit('leave', room, () => {
+      setRoom('');
+      console.log('LÄMNAR RUM');
     });
   };
 
   const sendMessage = (message: string) => {
     if (!room) throw Error("Can't send message without a room");
-    socket.emit("message", room, message);
+    socket.emit('message', room, message);
   };
 
   const typing = (room: string, username: string, isTyping: boolean) => {
-    socket.emit("typing", room, username, isTyping);
+    socket.emit('typing', room, username, isTyping);
   };
 
   const typingCli = (typingUsers: string[]) => {
@@ -74,10 +84,10 @@ function SocketProvider({ children }: PropsWithChildren) {
 
   useEffect(() => {
     function connect() {
-      console.log("Connected to server");
+      console.log('Connected to server');
     }
     function disconnect() {
-      console.log("Disconnected from the server");
+      console.log('Disconnected from the server');
     }
     function message(username: string, message: string) {
       console.log(username, message);
@@ -90,24 +100,24 @@ function SocketProvider({ children }: PropsWithChildren) {
       console.log(username);
     }
     function leave() {
-      console.log("left room");
+      console.log('left room');
     }
 
-    socket.on("connect", connect);
-    socket.on("disconnect", disconnect);
-    socket.on("message", message);
-    socket.on("rooms", rooms);
-    socket.on("username", username);
-    socket.on("leave", leave);
-    socket.on("typing", typingCli);
+    socket.on('connect', connect);
+    socket.on('disconnect', disconnect);
+    socket.on('message', message);
+    socket.on('rooms', rooms);
+    socket.on('username', username);
+    socket.on('leave', leave);
+    socket.on('typing', typingCli);
 
     return () => {
-      socket.off("connect", connect);
-      socket.off("disconnect", disconnect);
-      socket.off("message", message);
-      socket.off("rooms", rooms);
-      socket.off("username", username);
-      socket.off("leave", leave);
+      socket.off('connect', connect);
+      socket.off('disconnect', disconnect);
+      socket.off('message', message);
+      socket.off('rooms', rooms);
+      socket.off('username', username);
+      socket.off('leave', leave);
     };
   }, []);
 
@@ -127,7 +137,8 @@ function SocketProvider({ children }: PropsWithChildren) {
         isTyping,
         setIsTyping,
         typingUserState,
-      }}>
+      }}
+    >
       {children}
     </SocketContext.Provider>
   );
