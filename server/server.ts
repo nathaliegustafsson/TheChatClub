@@ -16,6 +16,7 @@ const io = new Server<
 >();
 
 let typingUsers: string[] = [];
+let users: string[] = [];
 
 const DB = 'thechatclub';
 const COLLECTION = 'socket.io-adapter-events';
@@ -45,9 +46,17 @@ const main = async () => {
   io.on('connection', (socket) => {
     console.log('a user connected');
 
+    socket.on('disconnect', () => {
+      users.splice(users.indexOf(socket.data.username!));
+      io.emit('users', users);
+    });
+
     socket.on('username', (username, ack) => {
       socket.data.username = username;
       console.log(username);
+      users.push(socket.data.username!);
+      io.emit('users', users);
+      console.log('users:', users);
       ack();
     });
 
