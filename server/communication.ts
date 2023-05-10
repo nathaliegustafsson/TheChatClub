@@ -2,6 +2,7 @@ export interface ServerToClientEvents {
   message: (username: string, message: string) => void;
   rooms: (rooms: string[]) => void;
   typing: (typingUsers: string[]) => void;
+  users: (users: { userID: string; username: string }[]) => void;
 }
 
 export interface ClientToServerEvents {
@@ -17,10 +18,22 @@ export interface InterServerEvents {
 }
 
 export interface SocketData {
-  username: string;
+  username?: string;
+  socketID?: string;
+  userID?: string;
 }
 
 export interface Message {
   username: string;
   message: string;
+}
+
+export interface User {
+  userID: string;
+  username: string;
+} // ska nog tas bort för vi använder det andra nedan
+
+export interface ConnectedUser {
+  userID: string;
+  username: string;
 }
