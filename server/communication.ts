@@ -1,5 +1,5 @@
 export interface ServerToClientEvents {
-  message: (username: string, message: string) => void;
+  message: (username: string, message: string, room: string) => void;
   rooms: (rooms: string[]) => void;
 }
 
