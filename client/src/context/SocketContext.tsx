@@ -24,6 +24,7 @@ export interface ContextValues {
   setIsTyping: Dispatch<SetStateAction<boolean>>;
   typing: (room: string, username: string, isTyping: boolean) => void;
   typingUserState: string[];
+  users: Array<{ userID: string; username: string; self?: boolean }>;
 }
 
 let socket = io({ autoConnect: false });
@@ -39,6 +40,9 @@ function SocketProvider({ children }: PropsWithChildren) {
   const [isTyping, setIsTyping] = useState(false);
   const [typingUserState, setTypingUserState] = useState<string[]>([]);
   const [connectError, setConnectError] = useState<string | null>(null);
+  const [users, setUsers] = useState<
+    Array<{ userID: string; username: string; self?: boolean }>
+  >([]);
 
   const updateSocketWithAuth = (username: string) => {
     socket.auth = { username };
@@ -83,6 +87,33 @@ function SocketProvider({ children }: PropsWithChildren) {
     setTypingUserState(typingUsers);
   };
 
+  const handleConnectError = (err: any) => {
+    if (err.message === 'invalid username') {
+      setConnectError('invalid username');
+      setUsername(null); // Reset the username if it is invalid
+    } else {
+      setConnectError(null);
+    }
+  };
+
+  const handleUsers = (
+    usersList: Array<{ userID: string; username: string }>
+  ) => {
+    const updatedUsers = usersList.map((user) => {
+      return {
+        ...user,
+        self: user.userID === socket.id,
+      };
+    });
+    updatedUsers.sort((userA, userB) => {
+      if (userA.self) return -1;
+      if (userB.self) return 1;
+      if (userA.username < userB.username) return -1;
+      return userA.username > userB.username ? 1 : 0;
+    });
+    setUsers(updatedUsers);
+  };
+
   useEffect(() => {
     function connect() {
       console.log('Connected to server');
@@ -111,14 +142,8 @@ function SocketProvider({ children }: PropsWithChildren) {
     socket.on('username', username);
     socket.on('leave', leave);
     socket.on('typing', typingCli);
-    socket.on('connect_error', (err) => {
-      if (err.message === 'invalid username') {
-        setConnectError('invalid username');
-        setUsername(null); // Reset the username if it is invalid
-      } else {
-        setConnectError(null);
-      }
-    });
+    socket.on('connect_error', handleConnectError);
+    socket.on('users', handleUsers);
 
     return () => {
       socket.off('connect', connect);
@@ -128,6 +153,7 @@ function SocketProvider({ children }: PropsWithChildren) {
       socket.off('username', username);
       socket.off('leave', leave);
       socket.off('connect_error');
+      socket.off('users', handleUsers);
     };
   }, []);
 
@@ -147,6 +173,7 @@ function SocketProvider({ children }: PropsWithChildren) {
         isTyping,
         setIsTyping,
         typingUserState,
+        users,
       }}
     >
       {children}
