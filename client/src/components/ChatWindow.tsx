@@ -1,9 +1,6 @@
-import { Box, Button, Container, TextField } from '@mui/material';
+import { Avatar, Box, Button, TextField } from '@mui/material';
 import { useRef, useState } from 'react';
 import { useSocket } from '../context/SocketContext';
-import { Avatar, Box, Button, TextField } from "@mui/material";
-import { useState } from "react";
-
 
 function ChatWindow() {
   const [message, setMessage] = useState('');
@@ -40,7 +37,6 @@ function ChatWindow() {
     }
   }
 
-
   const handlesubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     sendMessage(message);
@@ -55,74 +51,74 @@ function ChatWindow() {
   return (
     <Box
       sx={{
-        display: "flex",
-        flexDirection: "column",
+        display: 'flex',
+        flexDirection: 'column',
         flexGrow: 1,
-        height: "82vh",
+        height: '82vh',
       }}
     >
       <ul
         style={{
           margin: 0,
-          marginTop: "0.5rem",
+          marginTop: '0.5rem',
           padding: 0,
-          overflowY: "scroll",
+          overflowY: 'scroll',
         }}
       >
         {messages.map((message, i) => (
           <div
             key={i}
             style={{
-              display: "flex",
+              display: 'flex',
               justifyContent:
-                username === message.username ? "flex-end" : "flex-start",
-              marginRight: "2rem",
+                username === message.username ? 'flex-end' : 'flex-start',
+              marginRight: '2rem',
             }}
           >
             <li
               style={{
-                display: "flex",
-                color: "black",
-                listStyle: "none",
-                alignItems: "center",
+                display: 'flex',
+                color: 'black',
+                listStyle: 'none',
+                alignItems: 'center',
               }}
             >
-              <div style={{ display: "flex", flexDirection: "column" }}>
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <div
                   style={{
-                    display: "flex",
-                    alignItems: "center",
+                    display: 'flex',
+                    alignItems: 'center',
                     justifyContent:
-                      username === message.username ? "flex-end" : "flex-start",
+                      username === message.username ? 'flex-end' : 'flex-start',
                   }}
                 >
                   <Avatar
                     alt="Remy Sharp"
                     src="./lilafigur.png/"
-                    sx={{ marginRight: "0.9rem", marginBottom: "0.5rem" }}
+                    sx={{ marginRight: '0.9rem', marginBottom: '0.5rem' }}
                   />
                   <p
                     style={{
-                      color: "black",
+                      color: 'black',
                       margin: 0,
-                      marginBottom: "0.3rem",
-                      fontSize: "0.95rem",
-                      textAlign: "left",
+                      marginBottom: '0.3rem',
+                      fontSize: '0.95rem',
+                      textAlign: 'left',
                     }}
                   >
                     {message.username}
                   </p>
                 </div>
-                <div style={{ marginLeft: "3.1rem" }}>
+                <div style={{ marginLeft: '3.1rem' }}>
                   <div
                     style={{
                       backgroundColor:
-                        username === message.username ? "#FFEAFA" : "#CDDDF4",
-                      borderRadius: "2rem",
-                      padding: "0.7rem",
-                      marginBottom: "0.8rem",
-                      height: "auto",
-                      maxWidth: "20rem",
+                        username === message.username ? '#FFEAFA' : '#CDDDF4',
+                      borderRadius: '2rem',
+                      padding: '0.7rem',
+                      marginBottom: '0.8rem',
+                      height: 'auto',
+                      maxWidth: '20rem',
                     }}
                   >
                     {message.message}
@@ -143,11 +139,11 @@ function ChatWindow() {
         <form
           onSubmit={handlesubmit}
           style={{
-            display: "flex",
+            display: 'flex',
             flex: 1,
-            marginBottom: "0.5rem",
-            marginTop: "1rem",
-            position: 'relative'
+            marginBottom: '0.5rem',
+            marginTop: '1rem',
+            position: 'relative',
           }}
         >
           <TextField
