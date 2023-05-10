@@ -20,6 +20,7 @@ import * as React from "react";
 import { useState } from "react";
 import { useSocket } from "../context/SocketContext";
 import ChatWindow from "./ChatWindow";
+import background from "/src/assets/gifstar.gif";
 
 const drawerWidth = 280;
 
@@ -68,8 +69,7 @@ function NestedList(props: {
                       <Typography
                         data-localroom={text}
                         onClick={handleRoomClick}
-                        variant="body1"
-                      >
+                        variant="body1">
                         {text}
                       </Typography>
                     </ListItemText>
@@ -105,19 +105,23 @@ function ResponsiveDrawer(props: Props) {
   };
 
   const drawer = (
-    <div style={{ paddingLeft: "1.5rem", paddingTop: "0" }}>
+    <div
+      style={{
+        paddingLeft: "1.5rem",
+        paddingTop: "0",
+        backgroundImage: `url(${background})`,
+      }}>
       <Toolbar />
-      <Typography
+      {/* <Typography
         variant="body2"
-        sx={{ fontSize: "2rem", marginBottom: "-1rem" }}
-      >
+        sx={{ fontSize: "2rem", marginBottom: "-1rem" }}>
         The
       </Typography>
-      <Typography variant="h4">CHAT CLUB</Typography>
+      <Typography variant="h4">CHAT CLUB</Typography> */}
+      <img src="/src/assets/logo.png" alt="The Chat Club" style={imageStyle} />
       <Typography
         variant="h5"
-        sx={{ marginBottom: "1rem", marginTop: "1.5rem" }}
-      >
+        sx={{ marginBottom: "1rem", marginTop: "1.5rem" }}>
         Welcome {username}!
       </Typography>
       <List>
@@ -126,8 +130,7 @@ function ResponsiveDrawer(props: Props) {
             display: "flex",
             flexDirection: "column",
             padding: "0px !important",
-          }}
-        >
+          }}>
           <form style={rootStyle} onSubmit={handleSubmit}>
             <TextField
               id="localroom"
@@ -148,8 +151,7 @@ function ResponsiveDrawer(props: Props) {
                 "& .MuiOutlinedInput-notchedOutline": {
                   border: "none",
                 },
-              }}
-            ></TextField>
+              }}></TextField>
             <Button
               variant="contained"
               type="submit"
@@ -157,8 +159,7 @@ function ResponsiveDrawer(props: Props) {
                 width: "60%",
                 fontSize: "1rem",
                 marginBottom: "1rem",
-              }}
-            >
+              }}>
               Create a room
             </Button>
           </form>
@@ -205,8 +206,7 @@ function ResponsiveDrawer(props: Props) {
         sx={{
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
-        }}
-      >
+        }}>
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
           <IconButton
             className="material-symbols-outlined"
@@ -214,8 +214,7 @@ function ResponsiveDrawer(props: Props) {
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ display: { sm: "none" }, color: "black" }}
-          >
+            sx={{ display: { sm: "none" }, color: "black" }}>
             menu
           </IconButton>
           <Typography variant="h6" noWrap component="div">
@@ -224,8 +223,7 @@ function ResponsiveDrawer(props: Props) {
           <IconButton
             className="material-symbols-outlined"
             onClick={() => leaveRoom(room!)}
-            sx={{ fontSize: "2rem", color: "black" }}
-          >
+            sx={{ fontSize: "2rem", color: "black" }}>
             logout
           </IconButton>
         </Toolbar>
@@ -233,8 +231,7 @@ function ResponsiveDrawer(props: Props) {
       <Box
         component="nav"
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-        aria-label="navigation menu"
-      >
+        aria-label="navigation menu">
         {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Drawer
           container={container}
@@ -250,8 +247,7 @@ function ResponsiveDrawer(props: Props) {
               boxSizing: "border-box",
               width: drawerWidth,
             },
-          }}
-        >
+          }}>
           {drawer}
         </Drawer>
         <Drawer
@@ -263,8 +259,7 @@ function ResponsiveDrawer(props: Props) {
               width: drawerWidth,
             },
           }}
-          open
-        >
+          open>
           {drawer}
         </Drawer>
       </Box>
@@ -274,8 +269,7 @@ function ResponsiveDrawer(props: Props) {
           flexGrow: 1,
           p: 3,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
-        }}
-      >
+        }}>
         <Toolbar />
         <ChatWindow />
       </Box>
@@ -288,6 +282,10 @@ const rootStyle: React.CSSProperties = {
   flexDirection: "column",
   gap: "0.5rem",
   width: "100%",
+};
+
+const imageStyle: React.CSSProperties = {
+  height: "9rem",
 };
 
 export default ResponsiveDrawer;
