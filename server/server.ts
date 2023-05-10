@@ -1,10 +1,10 @@
-import { Server } from 'socket.io';
+import { Server } from "socket.io";
 import type {
   ClientToServerEvents,
   InterServerEvents,
   ServerToClientEvents,
   SocketData,
-} from './communication';
+} from "./communication";
 
 const io = new Server<
   ClientToServerEvents,
@@ -13,21 +13,21 @@ const io = new Server<
   SocketData
 >();
 
-io.on('connection', (socket) => {
-  console.log('a user connected');
+io.on("connection", (socket) => {
+  console.log("a user connected");
 
-  socket.on('username', (username, ack) => {
+  socket.on("username", (username, ack) => {
     socket.data.username = username;
     console.log(username);
     ack();
   });
 
-  socket.on('message', (room, message) => {
-    io.to(room).emit('message', socket.data.username!, message);
+  socket.on("message", (room, message) => {
+    io.to(room).emit("message", socket.data.username!, message, room);
     console.log(room, socket.data.username, message);
   });
 
-  socket.on('join', (room, ack) => {
+  socket.on("join", (room, ack) => {
     // Leave all rooms before entering a new one.
     for (const roomId in socket.rooms) {
       if (roomId !== socket.id) {
@@ -38,18 +38,18 @@ io.on('connection', (socket) => {
     console.log(socket.rooms);
     ack();
     // When a user joins a room, send an updated list of rooms to everyone
-    io.emit('rooms', getRooms());
+    io.emit("rooms", getRooms());
   });
 
   // Leave room
-  socket.on('leave', (room, ack) => {
+  socket.on("leave", (room, ack) => {
     socket.leave(room);
     ack();
-    io.emit('rooms', getRooms());
+    io.emit("rooms", getRooms());
   });
 
   // When a new user connects, send the list of rooms
-  socket.emit('rooms', getRooms());
+  socket.emit("rooms", getRooms());
 });
 
 function getRooms() {
@@ -65,4 +65,4 @@ function getRooms() {
 }
 
 io.listen(3000);
-console.log('listening on port 3000');
+console.log("listening on port 3000");
