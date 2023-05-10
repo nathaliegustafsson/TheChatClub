@@ -48,6 +48,7 @@ function SocketProvider({ children }: PropsWithChildren) {
   const joinRoom = (room: string) => {
     socket.emit("join", room, () => {
       setRoom(room);
+      setMessages([]);
     });
   };
 
