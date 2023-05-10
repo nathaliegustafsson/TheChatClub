@@ -7,7 +7,7 @@ function ChatWindow() {
   const [showImage, setShowImage] = useState(true);
   const { sendMessage, messages, username, room } = useSocket();
 
-  const handleSendMessage = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     sendMessage(message);
     setMessage("");
@@ -26,7 +26,13 @@ function ChatWindow() {
         <img
           src="/src/assets/yellowmailboxroom.png"
           alt="No active chat"
-          style={{ width: "80%", height: "80%", objectFit: "contain" }}
+          style={{
+            width: "80%",
+            height: "80%",
+            objectFit: "contain",
+            display: "block",
+            margin: "auto",
+          }}
         />
       ) : (
         <>
@@ -34,7 +40,13 @@ function ChatWindow() {
             <img
               src="/src/assets/NoMessages.png"
               alt="No messages"
-              style={{ width: "80%", height: "80%", objectFit: "contain" }}
+              style={{
+                width: "80%",
+                height: "80%",
+                objectFit: "contain",
+                display: "block",
+                margin: "auto",
+              }}
             />
           )}
           <ul
@@ -114,7 +126,7 @@ function ChatWindow() {
               flex: 1,
             }}>
             <form
-              onSubmit={handleSendMessage}
+              onSubmit={handleSubmit}
               style={{
                 display: "flex",
                 flex: 1,
