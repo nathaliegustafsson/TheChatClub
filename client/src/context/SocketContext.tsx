@@ -18,7 +18,7 @@ export interface ContextValues {
   setAllRooms?: string[];
   messages: Message[];
   saveUsername: (username: string) => void;
-  username: string;
+  username: string | null;
   leaveRoom: (room: string) => void;
   isTyping: boolean;
   setIsTyping: Dispatch<SetStateAction<boolean>>;
@@ -32,12 +32,13 @@ const SocketContext = createContext<ContextValues>(null as any);
 export const useSocket = () => useContext(SocketContext);
 
 function SocketProvider({ children }: PropsWithChildren) {
-  const [username, setUsername] = useState<string>('');
+  const [username, setUsername] = useState<string | null>('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [room, setRoom] = useState<string>('');
   const [allRooms, setAllRooms] = useState<string[]>();
   const [isTyping, setIsTyping] = useState(false);
   const [typingUserState, setTypingUserState] = useState<string[]>([]);
+  const [connectError, setConnectError] = useState<string | null>(null);
 
   const updateSocketWithAuth = (username: string) => {
     socket.auth = { username };
@@ -110,6 +111,14 @@ function SocketProvider({ children }: PropsWithChildren) {
     socket.on('username', username);
     socket.on('leave', leave);
     socket.on('typing', typingCli);
+    socket.on('connect_error', (err) => {
+      if (err.message === 'invalid username') {
+        setConnectError('invalid username');
+        setUsername(null); // Reset the username if it is invalid
+      } else {
+        setConnectError(null);
+      }
+    });
 
     return () => {
       socket.off('connect', connect);
@@ -118,6 +127,7 @@ function SocketProvider({ children }: PropsWithChildren) {
       socket.off('rooms', rooms);
       socket.off('username', username);
       socket.off('leave', leave);
+      socket.off('connect_error');
     };
   }, []);
 
