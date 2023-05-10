@@ -90,6 +90,10 @@ const main = async () => {
     // When a new user connects, send the list of rooms
     socket.emit('rooms', getRooms());
     // socket.emit('typing', typingUsers);
+
+    socket.on('saveUser', async (username: string) => {
+      await saveUserToDatabase(username);
+    });
   });
 
   io.listen(3000);
@@ -108,4 +112,14 @@ function getRooms() {
     }
   }
   return roomsFound;
+}
+
+async function saveUserToDatabase(username: string) {
+  const user = { username };
+  try {
+    await mongoClient.db(DB).collection('users').insertOne(user);
+    console.log('User saved to the database');
+  } catch (error) {
+    console.error('Error saving user to the database:', error);
+  }
 }

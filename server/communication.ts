@@ -2,6 +2,8 @@ export interface ServerToClientEvents {
   message: (username: string, message: string) => void;
   rooms: (rooms: string[]) => void;
   typing: (typingUsers: string[]) => void;
+  user: (users: string[]) => void;
+  users: (users: User[]) => void;
 }
 
 export interface ClientToServerEvents {
@@ -10,6 +12,7 @@ export interface ClientToServerEvents {
   username: (username: string, ack: () => void) => void;
   leave: (room: string, ack: () => void) => void;
   typing: (room: string, username: string, isTyping: boolean) => void;
+  saveUser: (username: string) => void;
 }
 
 export interface InterServerEvents {
@@ -17,10 +20,20 @@ export interface InterServerEvents {
 }
 
 export interface SocketData {
-  username: string;
+  username?: string;
+  socketID?: string;
+  userID?: string;
 }
 
 export interface Message {
   username: string;
   message: string;
+}
+
+export interface User {
+  userID?: string;
+  username?: string;
+  socketID?: string;
+  // isConnected: boolean;
+  // messages?: DirectMessage[] | undefined;
 }
