@@ -24,7 +24,6 @@ function ChatWindow() {
     setMessage(e.target.value);
 
     if (!username) return;
-
     if (!isTyping) {
       setIsTyping(true);
       typing(room, username, true);
@@ -43,9 +42,7 @@ function ChatWindow() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     if (!username) return;
-
     sendMessage(message);
     setMessage('');
     setShowImage(false);
