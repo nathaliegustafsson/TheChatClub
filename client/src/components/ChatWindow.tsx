@@ -1,9 +1,10 @@
 import { Avatar, Box, Button, TextField } from '@mui/material';
-import { CSSProperties, useRef, useState } from 'react';
+import { CSSProperties, useEffect, useRef, useState } from 'react';
 import { useSocket } from '../context/SocketContext';
 
 function ChatWindow() {
   const [message, setMessage] = useState('');
+  const chatContainerRef = useRef<HTMLUListElement>(null);
 
   const {
     sendMessage,
@@ -49,6 +50,14 @@ function ChatWindow() {
     }
   };
 
+  // Scroll to the bottom of the chat container
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop =
+        chatContainerRef.current.scrollHeight;
+    }
+  }, [messages]); // Scroll when messages change
+
   return (
     <Box
       sx={{
@@ -88,6 +97,7 @@ function ChatWindow() {
             <></>
           )}
           <ul
+            ref={chatContainerRef}
             style={{
               margin: 0,
               marginTop: '0.5rem',
