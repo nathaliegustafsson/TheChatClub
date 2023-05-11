@@ -7,8 +7,9 @@ import {
   useEffect,
   useState,
 } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { io } from 'socket.io-client';
-import type { Message, User } from '../../../server/communication';
+import type { Message, SocketData, User } from '../../../server/communication';
 export interface ContextValues {
   joinRoom: (room: string) => void;
   sendMessage: (message: string) => void;
@@ -45,21 +46,12 @@ function SocketProvider({ children }: PropsWithChildren) {
     Array<{ userID: string; username: string; self?: boolean }>
   >([]);
   const [allUsers, setAllUsers] = useState<User[]>([]);
-
-  const updateSocketWithAuth = (username: string) => {
-    socket.auth = { username };
-    socket.connect();
-  };
+  const navigate = useNavigate();
 
   const saveUsername = (username: string) => {
-    if (!socket.connected) {
-      updateSocketWithAuth(username);
-    } else {
-      socket.disconnect();
-      socket = io({ autoConnect: false });
-      updateSocketWithAuth(username);
-    }
     setUsername(username);
+    socket.auth = { username };
+    socket.connect();
   };
 
   const joinRoom = (room: string) => {
@@ -125,6 +117,16 @@ function SocketProvider({ children }: PropsWithChildren) {
   };
 
   useEffect(() => {
+    const sessionID = localStorage.getItem('sessionID');
+
+    if (sessionID) {
+      navigate('/chat');
+      socket.auth = { sessionID };
+      socket.connect();
+    }
+  }, []);
+
+  useEffect(() => {
     function connect() {
       console.log('Connected to server');
     }
@@ -144,6 +146,12 @@ function SocketProvider({ children }: PropsWithChildren) {
     function leave() {
       console.log('left room');
     }
+    function handleSession({ sessionID }: SocketData) {
+      // attach the session ID to the next reconnection attempts
+      socket.auth = { sessionID };
+      // store it in the localStorage
+      localStorage.setItem('sessionID', sessionID);
+    }
 
     socket.on('connect', connect);
     socket.on('disconnect', disconnect);
@@ -156,6 +164,7 @@ function SocketProvider({ children }: PropsWithChildren) {
     socket.on('users', handleUsers);
     socket.on('user connected', handleUserConnected);
     socket.on('user disconnected', handleUserDisconnected);
+    socket.on('session', handleSession);
 
     return () => {
       socket.off('connect', connect);
@@ -168,6 +177,7 @@ function SocketProvider({ children }: PropsWithChildren) {
       socket.off('users', handleUsers);
       socket.off('user connected', handleUserConnected);
       socket.off('user disconnected', handleUserDisconnected);
+      socket.off('session', handleSession);
     };
   }, []);
 

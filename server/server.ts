@@ -43,18 +43,36 @@ const main = async () => {
   io.adapter(createAdapter(mongoCollection));
 
   // check username before connecting
-  io.use((socket, next) => {
+  io.use(async (socket, next) => {
+    const sessionID = socket.handshake.auth.sessionID;
+    if (sessionID) {
+      // find existing session
+      const session = await sessionsCollection.findOne({ sessionID });
+      if (session) {
+        socket.data.sessionID = session.sessionID;
+        socket.data.userID = session.userID;
+        socket.data.username = session.username;
+        return next();
+      }
+    }
     const username = socket.handshake.auth.username;
     if (!username) {
       return next(new Error('invalid username'));
     }
+    // create new session
+    socket.data.sessionID = Date.now().toString();
+    socket.data.userID = Date.now().toString();
     socket.data.username = username;
+    await sessionsCollection.insertOne(socket.data as SocketData);
     next();
   });
 
   // connect
   io.on('connection', (socket) => {
     console.log('a user connected');
+
+    // Let the client know about it self
+    socket.emit('session', socket.data as SocketData);
 
     // Emit the list of users to all clients
     const users: { userID: string; username: string }[] = [];
@@ -156,4 +174,14 @@ function getRooms() {
     }
   }
   return roomsFound;
+}
+
+interface Room {
+  name: string;
+  users: User[];
+}
+
+interface User {
+  userID: string;
+  name: string;
 }

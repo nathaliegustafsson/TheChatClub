@@ -5,6 +5,7 @@ export interface ServerToClientEvents {
   users: (users: Array<{ userID: string; username: string }>) => void;
   'user connected': (user: { userID: string; username: string }) => void;
   'user disconnected': (userID: string) => void;
+  session: (session: SocketData) => void;
 }
 
 export interface ClientToServerEvents {
@@ -20,9 +21,9 @@ export interface InterServerEvents {
 }
 
 export interface SocketData {
-  username?: string;
-  socketID?: string;
-  userID?: string;
+  username: string;
+  sessionID: string;
+  userID: string;
 }
 
 export interface User {
