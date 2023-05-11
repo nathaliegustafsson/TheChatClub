@@ -211,12 +211,16 @@ function ChatWindow() {
               <span
                 style={{
                   position: 'absolute',
-                  bottom: '2rem',
-                  left: '40%',
+                  bottom: '2.6rem',
+                  left: "0.4rem",
                   color: 'black',
                 }}
               >
-                {typingUserState.toString()}
+                {typingUserState.length > 0 ? (
+                  typingUserState.toString() + ' is typing...'
+                ) : (
+                  <span></span>
+                )}
               </span>
             </form>
           </Box>
