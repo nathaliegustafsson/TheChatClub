@@ -76,9 +76,9 @@ const main = async () => {
     // Let the client know about it self
     socket.emit('session', socket.data as SocketData);
 
+    // When a user disconnects
     socket.on('disconnect', () => {
       console.log('a user disconnected');
-
       // Find the room this socket was in
       for (const [roomName, room] of Object.entries(rooms)) {
         room.users = room.users.filter(
