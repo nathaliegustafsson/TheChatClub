@@ -23,6 +23,7 @@ function ChatWindow() {
   function handleTyping(e: any) {
     setMessage(e.target.value);
 
+    if (!username) return;
     if (!isTyping) {
       setIsTyping(true);
       typing(room, username, true);
