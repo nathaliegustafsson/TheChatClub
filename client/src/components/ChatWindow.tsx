@@ -4,7 +4,6 @@ import { useSocket } from '../context/SocketContext';
 
 function ChatWindow() {
   const [message, setMessage] = useState('');
-  const [showImage, setShowImage] = useState(true);
 
   const {
     sendMessage,
@@ -43,7 +42,6 @@ function ChatWindow() {
     e.preventDefault();
     sendMessage(message);
     setMessage('');
-    setShowImage(false);
     if (isTyping) {
       clearTimeout(timerRef.current);
       typing(room, username, false);
