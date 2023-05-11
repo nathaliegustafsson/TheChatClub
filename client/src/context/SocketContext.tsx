@@ -7,7 +7,6 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { io } from 'socket.io-client';
 import type { Message, SocketData, User } from '../../../server/communication';
 export interface ContextValues {
@@ -46,7 +45,6 @@ function SocketProvider({ children }: PropsWithChildren) {
     Array<{ userID: string; username: string; self?: boolean }>
   >([]);
   const [allUsers, setAllUsers] = useState<User[]>([]);
-  const navigate = useNavigate();
 
   const saveUsername = (username: string) => {
     setUsername(username);
@@ -120,7 +118,7 @@ function SocketProvider({ children }: PropsWithChildren) {
     const sessionID = localStorage.getItem('sessionID');
 
     if (sessionID) {
-      navigate('/chat');
+      // navigate('/chat');
       socket.auth = { sessionID };
       socket.connect();
     }
