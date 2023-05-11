@@ -8,7 +8,7 @@ import {
   useState,
 } from 'react';
 import { io } from 'socket.io-client';
-import type { Message } from '../../../server/communication';
+import type { Message, User } from '../../../server/communication';
 export interface ContextValues {
   joinRoom: (room: string) => void;
   sendMessage: (message: string) => void;
@@ -24,7 +24,8 @@ export interface ContextValues {
   setIsTyping: Dispatch<SetStateAction<boolean>>;
   typing: (room: string, username: string, isTyping: boolean) => void;
   typingUserState: string[];
-  users: Array<{ userID: string; username: string; self?: boolean }>;
+  users: User[];
+  allUsers: User[];
 }
 
 let socket = io({ autoConnect: false });
@@ -43,6 +44,7 @@ function SocketProvider({ children }: PropsWithChildren) {
   const [users, setUsers] = useState<
     Array<{ userID: string; username: string; self?: boolean }>
   >([]);
+  const [allUsers, setAllUsers] = useState<User[]>([]);
 
   const updateSocketWithAuth = (username: string) => {
     socket.auth = { username };
@@ -114,6 +116,14 @@ function SocketProvider({ children }: PropsWithChildren) {
     setUsers(updatedUsers);
   };
 
+  const handleUserConnected = (user: { userID: string; username: string }) => {
+    console.log('User connected:', user.username);
+  };
+
+  const handleUserDisconnected = (userID: string) => {
+    setUsers((prevUsers) => prevUsers.filter((user) => user.userID !== userID));
+  };
+
   useEffect(() => {
     function connect() {
       console.log('Connected to server');
@@ -144,6 +154,8 @@ function SocketProvider({ children }: PropsWithChildren) {
     socket.on('typing', typingCli);
     socket.on('connect_error', handleConnectError);
     socket.on('users', handleUsers);
+    socket.on('user connected', handleUserConnected);
+    socket.on('user disconnected', handleUserDisconnected);
 
     return () => {
       socket.off('connect', connect);
@@ -154,6 +166,8 @@ function SocketProvider({ children }: PropsWithChildren) {
       socket.off('leave', leave);
       socket.off('connect_error');
       socket.off('users', handleUsers);
+      socket.off('user connected', handleUserConnected);
+      socket.off('user disconnected', handleUserDisconnected);
     };
   }, []);
 
@@ -174,6 +188,7 @@ function SocketProvider({ children }: PropsWithChildren) {
         setIsTyping,
         typingUserState,
         users,
+        allUsers,
       }}
     >
       {children}
