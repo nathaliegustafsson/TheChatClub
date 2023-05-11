@@ -21,9 +21,11 @@ const RoomList: React.FC<RoomListProps> = ({ rooms, joinRoom }) => {
 
   return (
     <React.Fragment>
-      <Typography variant="h6">Join a room</Typography>
+      <Typography variant="h6" sx={{ ml: 3, mt: 1 }}>
+        Join a room
+      </Typography>
       {rooms.map((room) => (
-        <ListItem key={room}>
+        <ListItem key={room} sx={{ ml: 2 }}>
           <ListItemButton>
             <ListItemText>
               <Typography

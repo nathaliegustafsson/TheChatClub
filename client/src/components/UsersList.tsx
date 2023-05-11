@@ -18,8 +18,11 @@ interface UserListProps {
 const UserList: React.FC<UserListProps> = ({ users }) => {
   return (
     <React.Fragment>
+      <Typography variant="h6" sx={{ ml: 3, mt: 1 }}>
+        Users online
+      </Typography>
       {users.map((user) => (
-        <ListItem key={user.userID}>
+        <ListItem key={user.userID} sx={{ ml: 2 }}>
           <ListItemButton>
             <ListItemText>
               <Typography variant="body1">{user.username}</Typography>

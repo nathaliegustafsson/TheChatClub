@@ -15,6 +15,7 @@ import { useState } from 'react';
 import { useSocket } from '../context/SocketContext';
 import ChatWindow from './ChatWindow';
 import RoomList from './RoomList';
+import UserList from './UsersList';
 import background from '/src/assets/gifstar.gif';
 
 const drawerWidth = 280;
@@ -141,6 +142,7 @@ function ResponsiveDrawer(props: Props) {
           </form>
         </Box>
         <RoomList rooms={allRooms ?? []} joinRoom={joinRoom} />
+        <UserList users={users ?? []} />
       </List>
     </div>
   );
