@@ -47,17 +47,17 @@ const main = async () => {
     console.log('a user connected');
 
     socket.on('username', (username, ack) => {
-      onlineUsers.push(username)
-      io.emit("users", onlineUsers)
+      onlineUsers.push(username);
+      io.emit('users', onlineUsers);
       socket.data.username = username;
       console.log(username);
       ack();
     });
 
-    socket.on("disconnect", (username) => {
-      onlineUsers.splice(onlineUsers.indexOf(username))
-      io.emit("users", onlineUsers)
-    })
+    socket.on('disconnect', (username) => {
+      onlineUsers.splice(onlineUsers.indexOf(username));
+      io.emit('users', onlineUsers);
+    });
 
     socket.on('typing', (room, username, isTyping) => {
       if (isTyping && !typingUsers.includes(username)) {

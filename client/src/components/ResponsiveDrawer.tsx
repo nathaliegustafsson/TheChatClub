@@ -184,11 +184,11 @@ function ResponsiveDrawer(props: Props) {
           items={[
             {
               title: 'Users',
-              children:  ["hejhej"], 
+              children: connectedUsers,
               // connectedUsers ?? [],
             },
           ]}
-          joinRoom={joinRoom} 
+          joinRoom={joinRoom}
         />
         <NestedList
           items={[
