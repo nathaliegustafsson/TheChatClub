@@ -4,6 +4,7 @@ import { Server } from 'socket.io';
 import type {
   ClientToServerEvents,
   InterServerEvents,
+  Room,
   ServerToClientEvents,
   SocketData,
 } from './communication';
@@ -15,6 +16,7 @@ const io = new Server<
   SocketData
 >();
 
+const rooms: Record<string, Room> = {};
 let typingUsers: string[] = [];
 
 const DB = 'thechatclub';
@@ -74,6 +76,19 @@ const main = async () => {
     // Let the client know about it self
     socket.emit('session', socket.data as SocketData);
 
+    socket.on('disconnect', () => {
+      console.log('a user disconnected');
+
+      // Find the room this socket was in
+      for (const [roomName, room] of Object.entries(rooms)) {
+        room.users = room.users.filter(
+          (user) => user.userID !== socket.data.userID
+        );
+        // Notify other users in the room that this user has left
+        socket.broadcast.to(roomName).emit('users', room.users);
+      }
+    });
+
     // User is typing
     socket.on('typing', (room, username, isTyping) => {
       if (isTyping && !typingUsers.includes(username)) {
@@ -94,24 +109,48 @@ const main = async () => {
 
     // Join room
     socket.on('join', (room, ack) => {
-      // Leave all rooms before entering a new one.
       for (const roomId of socket.rooms) {
         if (roomId !== socket.id) {
           socket.leave(roomId);
+          if (rooms[roomId]) {
+            rooms[roomId].users = rooms[roomId].users.filter(
+              (user) => user.userID !== socket.data.userID
+            );
+            if (rooms[roomId].users.length === 0) {
+              delete rooms[roomId];
+            }
+          }
         }
       }
       socket.join(room);
-      console.log(socket.rooms);
-      ack();
-      // When a user joins a room, send an updated list of rooms to everyone
+      if (!rooms[room]) {
+        rooms[room] = { name: room, users: [] };
+      }
+      if (socket.data.userID && socket.data.username) {
+        rooms[room].users.push({
+          userID: socket.data.userID,
+          username: socket.data.username,
+        });
+      }
+      io.to(room).emit('users', rooms[room].users);
       io.emit('rooms', getRooms());
+      ack();
     });
 
     // Leave room
     socket.on('leave', (room, ack) => {
       socket.leave(room);
-      ack();
+      if (rooms[room]) {
+        rooms[room].users = rooms[room].users.filter(
+          (user) => user.userID !== socket.data.userID
+        );
+        if (rooms[room].users.length === 0) {
+          delete rooms[room];
+        }
+      }
+      io.to(room).emit('users', rooms[room]?.users || []);
       io.emit('rooms', getRooms());
+      ack();
     });
 
     // When a new user connects, send the list of rooms
