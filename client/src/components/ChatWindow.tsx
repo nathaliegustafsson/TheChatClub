@@ -187,7 +187,7 @@ function ChatWindow() {
                 autoComplete="off"
                 placeholder="Write here..."
                 value={message}
-                onChange={(e) => setMessage(e.target.value)}
+                onChange={handleTyping}
                 sx={{
                   flex: 1,
                   marginRight: '1rem',

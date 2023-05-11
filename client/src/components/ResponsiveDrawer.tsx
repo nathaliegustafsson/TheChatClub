@@ -164,7 +164,7 @@ function ResponsiveDrawer(props: Props) {
           items={[
             {
               title: 'Users',
-              content: <UsersList users={users} />,
+              content: <UsersList users={users ?? []} />,
             },
           ]}
         />

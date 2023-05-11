@@ -155,7 +155,7 @@ const main = async () => {
 
     // When a new user connects, send the list of rooms
     socket.emit('rooms', getRooms());
-    // socket.emit('typing', typingUsers);
+    socket.emit('typing', typingUsers);
   });
 
   io.listen(3000);
