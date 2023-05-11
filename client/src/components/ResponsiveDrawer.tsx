@@ -1,16 +1,11 @@
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
 import {
   AppBar,
   Box,
   Button,
-  Collapse,
   CssBaseline,
   Drawer,
   IconButton,
   List,
-  ListItemButton,
-  ListItemText,
   TextField,
   Toolbar,
   Typography,
@@ -20,7 +15,6 @@ import { useState } from 'react';
 import { useSocket } from '../context/SocketContext';
 import ChatWindow from './ChatWindow';
 import RoomList from './RoomList';
-import UsersList from './UsersList';
 import background from '/src/assets/gifstar.gif';
 
 const drawerWidth = 280;
@@ -29,43 +23,43 @@ interface Props {
   window?: () => Window;
 }
 
-interface Item {
-  title: string;
-  children: string;
-}
+// interface Item {
+//   title: string;
+//   children: string;
+// }
 
-function NestedList(props: {
-  items: {
-    title: string;
-    content: React.ReactNode;
-  }[];
-}) {
-  const [open, setOpen] = React.useState(true);
+// function NestedList(props: {
+//   items: {
+//     title: string;
+//     content: React.ReactNode;
+//   }[];
+// }) {
+//   const [open, setOpen] = React.useState(true);
 
-  const handleClick = () => {
-    setOpen(!open);
-  };
+//   const handleClick = () => {
+//     setOpen(!open);
+//   };
 
-  return (
-    <React.Fragment>
-      {props.items.map((item) => (
-        <React.Fragment key={item.title}>
-          <ListItemButton onClick={handleClick}>
-            <ListItemText>
-              <Typography variant="h6">{item.title}</Typography>
-            </ListItemText>
-            {open ? <ExpandLess /> : <ExpandMore />}
-          </ListItemButton>
-          <Collapse in={open} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-              {item.content}
-            </List>
-          </Collapse>
-        </React.Fragment>
-      ))}
-    </React.Fragment>
-  );
-}
+//   return (
+//     <React.Fragment>
+//       {props.items.map((item) => (
+//         <React.Fragment key={item.title}>
+//           <ListItemButton onClick={handleClick}>
+//             <ListItemText>
+//               <Typography variant="h6">{item.title}</Typography>
+//             </ListItemText>
+//             {open ? <ExpandLess /> : <ExpandMore />}
+//           </ListItemButton>
+//           <Collapse in={open} timeout="auto" unmountOnExit>
+//             <List component="div" disablePadding>
+//               {item.content}
+//             </List>
+//           </Collapse>
+//         </React.Fragment>
+//       ))}
+//     </React.Fragment>
+//   );
+// }
 
 function ResponsiveDrawer(props: Props) {
   const { window } = props;
@@ -96,12 +90,6 @@ function ResponsiveDrawer(props: Props) {
       }}
     >
       <Toolbar />
-      {/* <Typography
-        variant="body2"
-        sx={{ fontSize: "2rem", marginBottom: "-1rem" }}>
-        The
-      </Typography>
-      <Typography variant="h4">CHAT CLUB</Typography> */}
       <img src="/src/assets/logo.png" alt="The Chat Club" style={imageStyle} />
       <Typography
         variant="h5"
@@ -152,30 +140,7 @@ function ResponsiveDrawer(props: Props) {
             </Button>
           </form>
         </Box>
-        <NestedList
-          items={[
-            {
-              title: 'Join a room',
-              content: <RoomList rooms={allRooms ?? []} joinRoom={joinRoom} />,
-            },
-          ]}
-        />
-        <NestedList
-          items={[
-            {
-              title: 'Users',
-              content: <UsersList users={users ?? []} />,
-            },
-          ]}
-        />
-        {/* <NestedList
-          items={[
-            {
-              title: "DM's",
-              children: ['Nathalie', 'Sebastian', 'Emil', 'Gabriel'],
-            },
-          ]}
-        /> */}
+        <RoomList rooms={allRooms ?? []} joinRoom={joinRoom} />
       </List>
     </div>
   );
