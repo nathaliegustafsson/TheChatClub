@@ -2,6 +2,7 @@ export interface ServerToClientEvents {
   message: (username: string, message: string) => void;
   rooms: (rooms: string[]) => void;
   typing: (typingUsers: string[]) => void;
+  users: (onlineUsers: string[]) => void
 }
 
 export interface ClientToServerEvents {
