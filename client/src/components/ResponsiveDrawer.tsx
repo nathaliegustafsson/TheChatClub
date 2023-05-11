@@ -115,12 +115,6 @@ function ResponsiveDrawer(props: Props) {
       }}
     >
       <Toolbar />
-      {/* <Typography
-        variant="body2"
-        sx={{ fontSize: "2rem", marginBottom: "-1rem" }}>
-        The
-      </Typography>
-      <Typography variant="h4">CHAT CLUB</Typography> */}
       <img src="/src/assets/logo.png" alt="The Chat Club" style={imageStyle} />
       <Typography
         variant="h5"
@@ -186,15 +180,6 @@ function ResponsiveDrawer(props: Props) {
               title: 'Users',
               children: connectedUsers,
               // connectedUsers ?? [],
-            },
-          ]}
-          joinRoom={joinRoom}
-        />
-        <NestedList
-          items={[
-            {
-              title: "DM's",
-              children: ['Nathalie', 'Sebastian', 'Emil', 'Gabriel'],
             },
           ]}
           joinRoom={joinRoom}
