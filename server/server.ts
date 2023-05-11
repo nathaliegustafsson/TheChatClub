@@ -16,7 +16,6 @@ const io = new Server<
 >();
 
 let typingUsers: string[] = [];
-let onlineUsers: string[] = [];
 
 const DB = 'thechatclub';
 const COLLECTION = 'socket.io-adapter-events';
@@ -43,22 +42,39 @@ const main = async () => {
 
   io.adapter(createAdapter(mongoCollection));
 
+  // // check username before connecting
+  // io.use(async (socket, next) => {
+  //   const sessionID = socket.handshake.auth.sessionID;
+  //   if (sessionID) {
+  //     // find existing session
+  //     const session = await sessionsCollection.findOne({ sessionID });
+  //     if (session) {
+  //       socket.data.sessionID = session.sessionID;
+  //       socket.data.userID = session.userID;
+  //       socket.data.username = session.username;
+  //       return next();
+  //     }
+  //   }
+  //   const username = socket.handshake.auth.username;
+  //   if (!username) {
+  //     return next(new Error('invalid username'));
+  //   }
+  //   // create new session
+  //   socket.data.sessionID = Date.now().toString();
+  //   socket.data.userID = Date.now().toString();
+  //   socket.data.username = username;
+  //   await sessionsCollection.insertOne(socket.data as SocketData);
+  //   next();
+  // });
+
+  // connect
   io.on('connection', (socket) => {
     console.log('a user connected');
 
-    socket.on('username', (username, ack) => {
-      onlineUsers.push(username);
-      io.emit('users', onlineUsers);
-      socket.data.username = username;
-      console.log(username);
-      ack();
-    });
+    // // Let the client know about it self
+    // socket.emit('session', socket.data as SocketData);
 
-    socket.on('disconnect', (username) => {
-      onlineUsers.splice(onlineUsers.indexOf(username));
-      io.emit('users', onlineUsers);
-    });
-
+    // User is typing
     socket.on('typing', (room, username, isTyping) => {
       if (isTyping && !typingUsers.includes(username)) {
         typingUsers.push(username);
@@ -66,15 +82,16 @@ const main = async () => {
         typingUsers = typingUsers.filter((tu) => tu !== username);
       }
       console.log(typingUsers);
-      socket.broadcast.to(room).emit('typing', typingUsers);
-      // io.to(room).emit('typing', typingUsers);
+      io.to(room).emit('typing', typingUsers);
     });
 
+    // Message
     socket.on('message', (room, message) => {
       io.to(room).emit('message', socket.data.username!, message);
       console.log(room, socket.data.username, message);
     });
 
+    // Join room
     socket.on('join', (room, ack) => {
       // Leave all rooms before entering a new one.
       for (const roomId of socket.rooms) {
