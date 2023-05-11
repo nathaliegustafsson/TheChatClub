@@ -42,6 +42,7 @@ const main = async () => {
 
   io.adapter(createAdapter(mongoCollection));
 
+  // check username before connecting
   io.use((socket, next) => {
     const username = socket.handshake.auth.username;
     if (!username) {
@@ -51,9 +52,11 @@ const main = async () => {
     next();
   });
 
+  // connect
   io.on('connection', (socket) => {
     console.log('a user connected');
 
+    // Emit the list of users to all clients
     const users: { userID: string; username: string }[] = [];
     for (let [id, socket] of io.of('/').sockets) {
       if (socket.data.username) {
@@ -63,8 +66,37 @@ const main = async () => {
         });
       }
     }
-    socket.emit('users', users);
+    io.emit('users', users);
 
+    // notify existing users that a user has connected
+    if (socket.data.username) {
+      socket.broadcast.emit('user connected', {
+        userID: socket.id,
+        username: socket.data.username,
+      });
+    }
+
+    // Emit the updated list of users to all clients
+    const updatedUsers: { userID: string; username: string }[] = [];
+    for (let [id, socket] of io.of('/').sockets) {
+      if (socket.data.username) {
+        updatedUsers.push({
+          userID: id,
+          username: socket.data.username,
+        });
+      }
+    }
+    io.emit('users', updatedUsers);
+
+    // If a user disconnects
+    socket.on('disconnect', () => {
+      const user = users.find((user) => user.userID === socket.id);
+      if (user) {
+        socket.broadcast.emit('user disconnected', user.userID);
+      }
+    });
+
+    // User is typing
     socket.on('typing', (room, username, isTyping) => {
       if (isTyping && !typingUsers.includes(username)) {
         typingUsers.push(username);
@@ -75,11 +107,13 @@ const main = async () => {
       io.to(room).emit('typing', typingUsers);
     });
 
+    // Message
     socket.on('message', (room, message) => {
       io.to(room).emit('message', socket.data.username!, message);
       console.log(room, socket.data.username, message);
     });
 
+    // Join room
     socket.on('join', (room, ack) => {
       // Leave all rooms before entering a new one.
       for (const roomId of socket.rooms) {
