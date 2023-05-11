@@ -1,5 +1,5 @@
 import { Avatar, Box, Button, TextField } from '@mui/material';
-import { useRef, useState } from 'react';
+import { CSSProperties, useRef, useState } from 'react';
 import { useSocket } from '../context/SocketContext';
 
 function ChatWindow() {
@@ -190,6 +190,7 @@ function ChatWindow() {
                 sx={{
                   flex: 1,
                   marginRight: '1rem',
+                  zIndex: '10',
                   '& .MuiInputBase-input': {
                     bgcolor: '#ECECEC',
                     borderRadius: '20rem',
@@ -212,12 +213,19 @@ function ChatWindow() {
                 style={{
                   position: 'absolute',
                   bottom: '2.6rem',
-                  left: "0.4rem",
+                  left: '0.4rem',
                   color: 'black',
                 }}
               >
                 {typingUserState.length > 0 ? (
-                  typingUserState.toString() + ' is typing...'
+                  <>
+                    {typingUserState.toString()} is typing
+                    <img
+                      style={imageStyle}
+                      src="/src/assets/higherdots.gif"
+                      alt=""
+                    />
+                  </>
                 ) : (
                   <span></span>
                 )}
@@ -229,5 +237,11 @@ function ChatWindow() {
     </Box>
   );
 }
+
+const imageStyle: CSSProperties = {
+  height: '3rem',
+  marginBottom: '-1rem',
+  zIndex: '-2',
+};
 
 export default ChatWindow;
