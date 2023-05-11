@@ -23,29 +23,28 @@ function ChatWindow() {
   function handleTyping(e: any) {
     setMessage(e.target.value);
 
-    if (!username) return;
-    if (!isTyping) {
-      setIsTyping(true);
-      typing(room, username, true);
-    } else if (message.length < 1) {
-      clearTimeout(timerRef.current);
-      typing(room, username, false);
-      setIsTyping(false);
-    } else {
-      clearTimeout(timerRef.current);
-      timerRef.current = setTimeout(() => {
-        setIsTyping(false);
+    if (username) {
+      if (!isTyping) {
+        setIsTyping(true);
+        typing(room, username, true);
+      } else if (message.length < 1) {
+        clearTimeout(timerRef.current);
         typing(room, username, false);
-      }, 5000);
+        setIsTyping(false);
+      } else {
+        clearTimeout(timerRef.current);
+        timerRef.current = setTimeout(() => {
+          setIsTyping(false);
+          typing(room, username, false);
+        }, 5000);
+      }
     }
   }
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!username) return;
     sendMessage(message);
     setMessage('');
-    if (isTyping) {
+    if (username && isTyping) {
       clearTimeout(timerRef.current);
       typing(room, username, false);
       setIsTyping(false);
