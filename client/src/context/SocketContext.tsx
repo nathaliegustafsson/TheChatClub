@@ -8,43 +8,42 @@ import {
   useState,
 } from 'react';
 import { io } from 'socket.io-client';
-import type { Message } from '../../../server/communication';
+import type { Message, SocketData } from '../../../server/communication';
 export interface ContextValues {
   joinRoom: (room: string) => void;
   sendMessage: (message: string) => void;
   room: string;
   setRoom?: Dispatch<SetStateAction<string>>;
   allRooms?: string[];
-  setAllRooms?: string[];
+  setAllRooms?: Dispatch<SetStateAction<string[]>>;
   messages: Message[];
   saveUsername: (username: string) => void;
-  username: string;
+  username: string | null;
   leaveRoom: (room: string) => void;
   isTyping: boolean;
   setIsTyping: Dispatch<SetStateAction<boolean>>;
   typing: (room: string, username: string, isTyping: boolean) => void;
   typingUserState: string[];
-  connectedUsers: string[];
 }
 
-const socket = io();
+let socket = io({ autoConnect: false });
 
 const SocketContext = createContext<ContextValues>(null as any);
 export const useSocket = () => useContext(SocketContext);
 
 function SocketProvider({ children }: PropsWithChildren) {
-  const [username, setUsername] = useState<string>('');
+  const [username, setUsername] = useState<string | null>('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [room, setRoom] = useState<string>('');
   const [allRooms, setAllRooms] = useState<string[]>();
   const [isTyping, setIsTyping] = useState(false);
   const [typingUserState, setTypingUserState] = useState<string[]>([]);
-  const [connectedUsers, setConnectedUsers] = useState<string[]>([]);
+  const [connectError, setConnectError] = useState<string | null>(null);
 
   const saveUsername = (username: string) => {
-    socket.emit('username', username, () => {
-      setUsername(username);
-    });
+    setUsername(username);
+    socket.auth = { username };
+    socket.connect();
   };
 
   const joinRoom = (room: string) => {
@@ -74,9 +73,33 @@ function SocketProvider({ children }: PropsWithChildren) {
     setTypingUserState(typingUsers);
   };
 
-  const users = (onlineUsers: string[]) => {
-    setConnectedUsers(onlineUsers);
+  const handleConnectError = (err: any) => {
+    if (err.message === 'invalid username') {
+      setConnectError('invalid username');
+      setUsername(null); // Reset the username if it is invalid
+    } else {
+      setConnectError(null);
+    }
   };
+
+  useEffect(() => {
+    const sessionID = sessionStorage.getItem('sessionID');
+
+    if (sessionID) {
+      socket.auth = { sessionID };
+      socket.connect();
+    }
+
+    socket.on('session', (data: SocketData) => {
+      // Retrieve the username from the session data and set it in the state
+      const { username } = data;
+      setUsername(username);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
 
   useEffect(() => {
     function connect() {
@@ -98,6 +121,12 @@ function SocketProvider({ children }: PropsWithChildren) {
     function leave() {
       console.log('left room');
     }
+    function handleSession({ sessionID }: SocketData) {
+      // attach the session ID to the next reconnection attempts
+      socket.auth = { sessionID };
+      // store it in the sessionStorage
+      sessionStorage.setItem('sessionID', sessionID);
+    }
 
     socket.on('connect', connect);
     socket.on('disconnect', disconnect);
@@ -106,7 +135,8 @@ function SocketProvider({ children }: PropsWithChildren) {
     socket.on('username', username);
     socket.on('leave', leave);
     socket.on('typing', typingCli);
-    socket.on('users', users);
+    socket.on('connect_error', handleConnectError);
+    socket.on('session', handleSession);
 
     return () => {
       socket.off('connect', connect);
@@ -115,6 +145,8 @@ function SocketProvider({ children }: PropsWithChildren) {
       socket.off('rooms', rooms);
       socket.off('username', username);
       socket.off('leave', leave);
+      socket.off('connect_error');
+      socket.off('session', handleSession);
     };
   }, []);
 
@@ -134,7 +166,6 @@ function SocketProvider({ children }: PropsWithChildren) {
         isTyping,
         setIsTyping,
         typingUserState,
-        connectedUsers,
       }}
     >
       {children}
