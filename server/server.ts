@@ -16,6 +16,7 @@ const io = new Server<
 >();
 
 let typingUsers: string[] = [];
+let onlineUsers: string[] = [];
 
 const DB = 'thechatclub';
 const COLLECTION = 'socket.io-adapter-events';
@@ -46,9 +47,16 @@ const main = async () => {
     console.log('a user connected');
 
     socket.on('username', (username, ack) => {
+      onlineUsers.push(username);
+      io.emit('users', onlineUsers);
       socket.data.username = username;
       console.log(username);
       ack();
+    });
+
+    socket.on('disconnect', (username) => {
+      onlineUsers.splice(onlineUsers.indexOf(username));
+      io.emit('users', onlineUsers);
     });
 
     socket.on('typing', (room, username, isTyping) => {
@@ -58,7 +66,8 @@ const main = async () => {
         typingUsers = typingUsers.filter((tu) => tu !== username);
       }
       console.log(typingUsers);
-      io.to(room).emit('typing', typingUsers);
+      socket.broadcast.to(room).emit('typing', typingUsers);
+      // io.to(room).emit('typing', typingUsers);
     });
 
     socket.on('message', (room, message) => {
@@ -89,7 +98,7 @@ const main = async () => {
 
     // When a new user connects, send the list of rooms
     socket.emit('rooms', getRooms());
-    // socket.emit('typing', typingUsers);
+    socket.emit('typing', typingUsers);
   });
 
   io.listen(3000);
