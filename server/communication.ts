@@ -3,6 +3,7 @@ export interface ServerToClientEvents {
   rooms: (rooms: string[]) => void;
   typing: (typingUsers: string[]) => void;
   session: (session: SocketData) => void;
+  users: (users: User[]) => void;
 }
 
 export interface ClientToServerEvents {
@@ -11,6 +12,7 @@ export interface ClientToServerEvents {
   username: (username: string, ack: () => void) => void;
   leave: (room: string, ack: () => void) => void;
   typing: (room: string, username: string, isTyping: boolean) => void;
+  users: (room: string, users: User[]) => void;
 }
 
 export interface InterServerEvents {
