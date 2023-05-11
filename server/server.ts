@@ -82,7 +82,8 @@ const main = async () => {
         typingUsers = typingUsers.filter((tu) => tu !== username);
       }
       console.log(typingUsers);
-      io.to(room).emit('typing', typingUsers);
+      socket.broadcast.to(room).emit('typing', typingUsers);
+      // io.to(room).emit('typing', typingUsers);
     });
 
     // Message
