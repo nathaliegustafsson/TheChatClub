@@ -16,7 +16,6 @@ function ChatWindow() {
     room,
     typingUserState,
   } = useSocket();
-  let prevTypingValue = false;
 
   const timerRef = useRef<number>();
 
@@ -26,6 +25,7 @@ function ChatWindow() {
     if (!isTyping) {
       setIsTyping(true);
       typing(room, username, true);
+      setShowImage(true);
     } else if (message.length < 1) {
       clearTimeout(timerRef.current);
       typing(room, username, false);
@@ -177,6 +177,7 @@ function ChatWindow() {
                 flex: 1,
                 marginBottom: '0.5rem',
                 marginTop: '1rem',
+                position: 'relative',
               }}
             >
               <TextField
@@ -207,6 +208,16 @@ function ChatWindow() {
               <Button variant="contained" type="submit">
                 Send
               </Button>
+              <span
+                style={{
+                  position: 'absolute',
+                  bottom: '2rem',
+                  left: '40%',
+                  color: 'black',
+                }}
+              >
+                {typingUserState.toString()}
+              </span>
             </form>
           </Box>
         </>
