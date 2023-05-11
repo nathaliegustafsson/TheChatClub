@@ -42,6 +42,7 @@ function ChatWindow() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!username) return;
     sendMessage(message);
     setMessage('');
     if (isTyping) {
