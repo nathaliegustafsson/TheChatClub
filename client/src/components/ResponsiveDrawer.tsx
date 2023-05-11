@@ -142,7 +142,7 @@ function ResponsiveDrawer(props: Props) {
           </form>
         </Box>
         <RoomList rooms={allRooms ?? []} joinRoom={joinRoom} />
-        <UserList users={users ?? []} />
+        <UserList />
       </List>
     </div>
   );

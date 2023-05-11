@@ -15,7 +15,7 @@ export interface ContextValues {
   room: string;
   setRoom?: Dispatch<SetStateAction<string>>;
   allRooms?: string[];
-  setAllRooms?: string[];
+  setAllRooms?: Dispatch<SetStateAction<string[]>>;
   messages: Message[];
   saveUsername: (username: string) => void;
   username: string | null;
@@ -25,7 +25,6 @@ export interface ContextValues {
   typing: (room: string, username: string, isTyping: boolean) => void;
   typingUserState: string[];
   users: User[];
-  allUsers: User[];
 }
 
 let socket = io({ autoConnect: false });
@@ -44,7 +43,6 @@ function SocketProvider({ children }: PropsWithChildren) {
   const [users, setUsers] = useState<
     Array<{ userID: string; username: string; self?: boolean }>
   >([]);
-  const [allUsers, setAllUsers] = useState<User[]>([]);
 
   const saveUsername = (username: string) => {
     setUsername(username);
@@ -88,26 +86,12 @@ function SocketProvider({ children }: PropsWithChildren) {
     }
   };
 
-  const handleUsers = (
-    usersList: Array<{ userID: string; username: string }>
-  ) => {
-    const updatedUsers = usersList.map((user) => {
-      return {
-        ...user,
-        self: user.userID === socket.id,
-      };
-    });
-    updatedUsers.sort((userA, userB) => {
-      if (userA.self) return -1;
-      if (userB.self) return 1;
-      if (userA.username < userB.username) return -1;
-      return userA.username > userB.username ? 1 : 0;
-    });
-    setUsers(updatedUsers);
+  const handleUsers = (users: User[]) => {
+    setUsers(users);
   };
 
-  const handleUserConnected = (user: { userID: string; username: string }) => {
-    console.log('User connected:', user.username);
+  const handleUserConnected = (user: User) => {
+    setUsers((prevUsers) => [...prevUsers, user]);
   };
 
   const handleUserDisconnected = (userID: string) => {
@@ -115,13 +99,22 @@ function SocketProvider({ children }: PropsWithChildren) {
   };
 
   useEffect(() => {
-    const sessionID = localStorage.getItem('sessionID');
+    const sessionID = sessionStorage.getItem('sessionID');
 
     if (sessionID) {
-      // navigate('/chat');
       socket.auth = { sessionID };
       socket.connect();
     }
+
+    socket.on('session', (data: SocketData) => {
+      // Retrieve the username from the session data and set it in the state
+      const { username } = data;
+      setUsername(username);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
   }, []);
 
   useEffect(() => {
@@ -147,8 +140,8 @@ function SocketProvider({ children }: PropsWithChildren) {
     function handleSession({ sessionID }: SocketData) {
       // attach the session ID to the next reconnection attempts
       socket.auth = { sessionID };
-      // store it in the localStorage
-      localStorage.setItem('sessionID', sessionID);
+      // store it in the sessionStorage
+      sessionStorage.setItem('sessionID', sessionID);
     }
 
     socket.on('connect', connect);
@@ -196,7 +189,6 @@ function SocketProvider({ children }: PropsWithChildren) {
         setIsTyping,
         typingUserState,
         users,
-        allUsers,
       }}
     >
       {children}

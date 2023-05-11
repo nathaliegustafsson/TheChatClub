@@ -35,3 +35,8 @@ export interface Message {
   username: string;
   message: string;
 }
+
+export interface Room {
+  name: string;
+  users: User[];
+}

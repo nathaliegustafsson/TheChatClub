@@ -5,17 +5,11 @@ import {
   Typography,
 } from '@mui/material';
 import * as React from 'react';
+import { useSocket } from '../context/SocketContext';
 
-interface User {
-  userID: string;
-  username: string;
-}
+const UserList: React.FC = () => {
+  const { users } = useSocket();
 
-interface UserListProps {
-  users: User[];
-}
-
-const UserList: React.FC<UserListProps> = ({ users }) => {
   return (
     <React.Fragment>
       <Typography variant="h6" sx={{ ml: 3, mt: 1 }}>

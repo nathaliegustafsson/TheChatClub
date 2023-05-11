@@ -6,6 +6,7 @@ import type {
   InterServerEvents,
   ServerToClientEvents,
   SocketData,
+  User,
 } from './communication';
 
 const io = new Server<
@@ -67,15 +68,9 @@ const main = async () => {
     next();
   });
 
-  // connect
-  io.on('connection', (socket) => {
-    console.log('a user connected');
-
-    // Let the client know about it self
-    socket.emit('session', socket.data as SocketData);
-
-    // Emit the list of users to all clients
-    const users: { userID: string; username: string }[] = [];
+  // Function to get the list of users
+  function getUsers(): User[] {
+    const users: User[] = [];
     for (let [id, socket] of io.of('/').sockets) {
       if (socket.data.username) {
         users.push({
@@ -84,7 +79,18 @@ const main = async () => {
         });
       }
     }
-    io.emit('users', users);
+    return users;
+  }
+
+  // connect
+  io.on('connection', (socket) => {
+    console.log('a user connected');
+
+    // Let the client know about it self
+    socket.emit('session', socket.data as SocketData);
+
+    // Emit the list of users to all clients
+    io.emit('users', getUsers());
 
     // notify existing users that a user has connected
     if (socket.data.username) {
@@ -95,23 +101,17 @@ const main = async () => {
     }
 
     // Emit the updated list of users to all clients
-    const updatedUsers: { userID: string; username: string }[] = [];
-    for (let [id, socket] of io.of('/').sockets) {
-      if (socket.data.username) {
-        updatedUsers.push({
-          userID: id,
-          username: socket.data.username,
-        });
-      }
-    }
-    io.emit('users', updatedUsers);
+    io.emit('users', getUsers());
 
     // If a user disconnects
     socket.on('disconnect', () => {
+      const users = getUsers(); // Get the current list of users
       const user = users.find((user) => user.userID === socket.id);
       if (user) {
         socket.broadcast.emit('user disconnected', user.userID);
       }
+      // Emit the updated list of users to all clients
+      io.emit('users', getUsers());
     });
 
     // User is typing
@@ -174,14 +174,4 @@ function getRooms() {
     }
   }
   return roomsFound;
-}
-
-interface Room {
-  name: string;
-  users: User[];
-}
-
-interface User {
-  userID: string;
-  name: string;
 }
