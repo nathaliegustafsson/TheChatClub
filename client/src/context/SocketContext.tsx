@@ -24,7 +24,7 @@ export interface ContextValues {
   setIsTyping: Dispatch<SetStateAction<boolean>>;
   typing: (room: string, username: string, isTyping: boolean) => void;
   typingUserState: string[];
-  users: string[];
+  users?: string[];
 }
 
 const socket = io();
