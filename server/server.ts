@@ -1,4 +1,5 @@
 import { createAdapter } from '@socket.io/mongo-adapter';
+import { error } from 'console';
 import { MongoClient } from 'mongodb';
 import { Server } from 'socket.io';
 import type {
@@ -52,6 +53,9 @@ const main = async () => {
     });
 
     socket.on('username', (username, ack) => {
+      if (users.includes(username)) {
+        throw error('UPPTAGET XD');
+      }
       socket.data.username = username;
       console.log(username);
       users.push(socket.data.username!);
