@@ -74,7 +74,7 @@ function ChatWindow() {
         />
       ) : (
         <>
-          {showImage && (
+          {messages.length < 1 ? (
             <img
               src="/src/assets/NoMessages.png"
               alt="No messages"
@@ -86,6 +86,8 @@ function ChatWindow() {
                 margin: 'auto',
               }}
             />
+          ) : (
+            <></>
           )}
           <ul
             style={{
