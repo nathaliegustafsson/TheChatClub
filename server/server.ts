@@ -54,8 +54,10 @@ const main = async () => {
       ack();
     });
 
-    socket.on('disconnect', (username) => {
+    socket.on('disconnect', (username, room) => {
       onlineUsers.splice(onlineUsers.indexOf(username));
+      socket.leave(room);
+      io.emit('rooms', getRooms());
       io.emit('users', onlineUsers);
     });
 
@@ -106,7 +108,6 @@ const main = async () => {
 };
 
 main();
-
 function getRooms() {
   const { rooms } = io.sockets.adapter;
   const roomsFound: string[] = [];
