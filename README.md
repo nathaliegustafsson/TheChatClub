@@ -1,4 +1,4 @@
-# <img src="./client/src/assets/logo.png" width="100rem"/>
+# <img src="./client/src/assets/logosvart.png" width="100rem"/>
 
 # The Chat Club
 
