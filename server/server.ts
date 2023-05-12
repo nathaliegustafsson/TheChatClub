@@ -7,6 +7,7 @@ import type {
   ServerToClientEvents,
   SocketData,
 } from './communication';
+import { receiveAndSendMessage } from './controller';
 
 const io = new Server<
   ClientToServerEvents,
@@ -47,11 +48,16 @@ const main = async () => {
     console.log('a user connected');
 
     socket.on('username', (username, ack) => {
-      onlineUsers.push(username);
-      io.emit('users', onlineUsers);
-      socket.data.username = username;
-      console.log(username);
-      ack();
+      if (!onlineUsers.includes(username)) {
+        onlineUsers.push(username);
+        io.emit('users', onlineUsers);
+        socket.data.username = username;
+        console.log(username);
+        ack(true);
+      } else {
+        ack(false);
+        console.log('username already taken');
+      }
     });
 
     socket.on('disconnect', (username, room) => {
@@ -72,10 +78,7 @@ const main = async () => {
       // io.to(room).emit('typing', typingUsers);
     });
 
-    socket.on('message', (room, message) => {
-      io.to(room).emit('message', socket.data.username!, message);
-      console.log(room, socket.data.username, message);
-    });
+    socket.on('message', receiveAndSendMessage(io, socket));
 
     socket.on('join', (room, ack) => {
       // Leave all rooms before entering a new one.

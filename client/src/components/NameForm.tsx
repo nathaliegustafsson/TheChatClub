@@ -1,10 +1,10 @@
-import { Box, Button, TextField } from "@mui/material";
-import { CSSProperties, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useSocket } from "../context/SocketContext";
+import { Box, Button, TextField } from '@mui/material';
+import { CSSProperties, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useSocket } from '../context/SocketContext';
 
 function NameForm() {
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState('');
   const { saveUsername } = useSocket();
   const navigate = useNavigate();
 
@@ -14,18 +14,24 @@ function NameForm() {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    saveUsername(username);
-    navigate("/chat");
+    saveUsername(username, (success) => {
+      if (success) {
+        navigate('/chat');
+      } else {
+        alert('Username is already taken');
+      }
+    });
   };
 
   return (
     <Box
       sx={{
-        display: "flex",
-        flexDirection: "column",
-        padding: "0px !important",
-        marginTop: "4rem",
-      }}>
+        display: 'flex',
+        flexDirection: 'column',
+        padding: '0px !important',
+        marginTop: '4rem',
+      }}
+    >
       <form style={rootStyle} onSubmit={handleSubmit}>
         <TextField
           id="username"
@@ -35,23 +41,25 @@ function NameForm() {
           value={username}
           onChange={handleChange}
           sx={{
-            "& .MuiInputBase-input": {
-              bgcolor: "#ECECEC",
-              borderRadius: "20rem",
+            '& .MuiInputBase-input': {
+              bgcolor: '#ECECEC',
+              borderRadius: '20rem',
               color: (theme) => theme.palette.text.secondary,
               fontFamily: (theme) => theme.typography.body1,
             },
-            "& .MuiOutlinedInput-notchedOutline": {
-              border: "none",
+            '& .MuiOutlinedInput-notchedOutline': {
+              border: 'none',
             },
-          }}></TextField>
+          }}
+        ></TextField>
         <Button
           variant="contained"
           type="submit"
           sx={{
-            width: "25%",
-            fontSize: "1rem",
-          }}>
+            width: '25%',
+            fontSize: '1rem',
+          }}
+        >
           Save
         </Button>
       </form>
@@ -60,10 +68,10 @@ function NameForm() {
 }
 
 const rootStyle: CSSProperties = {
-  display: "flex",
-  flexDirection: "column",
-  gap: "0.5rem",
-  width: "100%",
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '0.5rem',
+  width: '100%',
 };
 
 export default NameForm;

@@ -17,7 +17,7 @@ export interface ContextValues {
   allRooms?: string[];
   setAllRooms?: string[];
   messages: Message[];
-  saveUsername: (username: string) => void;
+  saveUsername: (username: string, ack: (success: boolean) => void) => void;
   username: string;
   leaveRoom: (room: string) => void;
   isTyping: boolean;
@@ -41,9 +41,10 @@ function SocketProvider({ children }: PropsWithChildren) {
   const [typingUserState, setTypingUserState] = useState<string[]>([]);
   const [connectedUsers, setConnectedUsers] = useState<string[]>([]);
 
-  const saveUsername = (username: string) => {
-    socket.emit('username', username, () => {
+  const saveUsername = (username: string, ack: (success: boolean) => void) => {
+    socket.emit('username', username, (success: boolean) => {
       setUsername(username);
+      ack(success);
     });
   };
 
