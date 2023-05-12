@@ -50,11 +50,12 @@ function ChatWindow() {
     }
   };
 
-  // Scroll to the bottom of the chat container
   useEffect(() => {
     if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop =
-        chatContainerRef.current.scrollHeight;
+      chatContainerRef.current.scrollTo({
+        top: chatContainerRef.current.scrollHeight,
+        behavior: 'smooth',
+      });
     }
   }, [messages]); // Scroll when messages change
 
