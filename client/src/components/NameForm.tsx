@@ -18,7 +18,7 @@ function NameForm() {
       if (success) {
         navigate('/chat');
       } else {
-        console.log('NONONONO');
+        alert('Username is already taken');
       }
     });
   };
