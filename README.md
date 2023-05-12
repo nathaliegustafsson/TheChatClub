@@ -4,7 +4,7 @@
 
 ## A chat application
 
-This is a chat application where you can chat with your friends in real time. You add your username and then you can create a room or join an already existing room.
+This is a chat application where you can chat with your friends in real time. You add your username and then you can create a room or join an already existing room to have your chat conversation in.
 
 ## About the code
 
@@ -45,7 +45,7 @@ Run these commands in the terminal:
 - [x] Det ska gå att skapa ett rum (och samtidigt gå med i rummet).
 - [x] Det ska gå att lämna ett rum (tomma rum ska automatiskt försvinna).
 - [x] Samtliga rum skall vara synligt i en lista.
-- [x] De går att gå med i ett rum genom att klicka på det i listan
+- [x] Det går att gå med i ett rum genom att klicka på det i listan
 - [x] När en användare går med i ett nytt rum ska befintiligt rum lämnas automatiskt.
 - [x] Användare ska kunna skicka och läsa nya meddelanden i rummet de har gått med i
 - [x] När en användare håller på att skriva ett meddelande skall det synas för alla i rummet.
