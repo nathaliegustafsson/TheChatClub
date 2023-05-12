@@ -26,19 +26,19 @@ This is a chat application where you can chat with your friends in real time. Yo
 
 Run these commands in the terminal:
 
-- `For client`
+**For client**
 
-  - `cd client`
-  - `npm install`
-  - `npm run dev`
+- `cd client`
+- `npm install`
+- `npm run dev`
 
-    <br>
+  <br>
 
-- `For server`
+**For server**
 
-  - `cd server`
-  - `npm install`
-  - `npm run dev`
+- `cd server`
+- `npm install`
+- `npm run dev`
 
 <br>
 
