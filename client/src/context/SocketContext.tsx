@@ -8,7 +8,7 @@ import {
   useState,
 } from 'react';
 import { io } from 'socket.io-client';
-import type { Message, SocketData } from '../../../server/communication';
+import type { Message, SocketData, User } from '../../../server/communication';
 export interface ContextValues {
   joinRoom: (room: string) => void;
   sendMessage: (message: string) => void;
@@ -24,6 +24,7 @@ export interface ContextValues {
   setIsTyping: Dispatch<SetStateAction<boolean>>;
   typing: (room: string, username: string, isTyping: boolean) => void;
   typingUserState: string[];
+  usersInRooms: Record<string, User[]>;
 }
 
 let socket = io({ autoConnect: false });
@@ -39,6 +40,7 @@ function SocketProvider({ children }: PropsWithChildren) {
   const [isTyping, setIsTyping] = useState(false);
   const [typingUserState, setTypingUserState] = useState<string[]>([]);
   const [connectError, setConnectError] = useState<string | null>(null);
+  const [usersInRooms, setUsersInRooms] = useState<Record<string, User[]>>({});
 
   const saveUsername = (username: string) => {
     setUsername(username);
@@ -80,6 +82,24 @@ function SocketProvider({ children }: PropsWithChildren) {
     } else {
       setConnectError(null);
     }
+  };
+
+  const handleUsers = (room: string, users: User[]) => {
+    if (typeof room !== 'string' || !Array.isArray(users)) {
+      // console.error('Invalid "users" event data:', room, users);
+      return;
+    }
+
+    // Retrieve the session ID from the sessionStorage
+    const sessionID = sessionStorage.getItem('sessionID');
+
+    // Filter the users array based on the session ID
+    const filteredUsers = users.filter((user) => user.userID !== sessionID);
+
+    setUsersInRooms((prevUsersInRooms) => ({
+      ...prevUsersInRooms,
+      [room]: filteredUsers,
+    }));
   };
 
   useEffect(() => {
@@ -137,6 +157,7 @@ function SocketProvider({ children }: PropsWithChildren) {
     socket.on('typing', typingCli);
     socket.on('connect_error', handleConnectError);
     socket.on('session', handleSession);
+    socket.on('users', handleUsers);
 
     return () => {
       socket.off('connect', connect);
@@ -147,6 +168,7 @@ function SocketProvider({ children }: PropsWithChildren) {
       socket.off('leave', leave);
       socket.off('connect_error');
       socket.off('session', handleSession);
+      socket.off('users', handleUsers);
     };
   }, []);
 
@@ -166,6 +188,7 @@ function SocketProvider({ children }: PropsWithChildren) {
         isTyping,
         setIsTyping,
         typingUserState,
+        usersInRooms,
       }}
     >
       {children}
