@@ -47,11 +47,16 @@ const main = async () => {
     console.log('a user connected');
 
     socket.on('username', (username, ack) => {
-      onlineUsers.push(username);
-      io.emit('users', onlineUsers);
-      socket.data.username = username;
-      console.log(username);
-      ack();
+      if (!onlineUsers.includes(username)) {
+        onlineUsers.push(username);
+        io.emit('users', onlineUsers);
+        socket.data.username = username;
+        console.log(username);
+        ack(true);
+      } else {
+        ack(false);
+        console.log('username already taken');
+      }
     });
 
     socket.on('disconnect', (username, room) => {
