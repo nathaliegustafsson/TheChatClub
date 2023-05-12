@@ -104,6 +104,11 @@ const main = async () => {
     // Message
     socket.on('message', (room, message) => {
       io.to(room).emit('message', socket.data.username!, message);
+      console.log('room:', room);
+      console.log('username:', socket.data.username);
+      console.log('message:', message);
+      console.log('Rooms:', rooms);
+      console.log('Users:', rooms['Lilla Rummet'].users);
       console.log(room, socket.data.username, message);
     });
 
@@ -131,7 +136,10 @@ const main = async () => {
           userID: socket.data.userID,
           username: socket.data.username,
         });
+        console.log('Users in room:', rooms[room].users);
       }
+      console.log('Added user:', socket.data.username);
+      console.log('Users in room:', rooms[room].users);
       io.to(room).emit('users', rooms[room].users);
       io.emit('rooms', getRooms());
       ack();
@@ -146,10 +154,11 @@ const main = async () => {
         );
         if (rooms[room].users.length === 0) {
           delete rooms[room];
+        } else {
+          // Here, we broadcast the updated list of users in the room.
+          socket.broadcast.to(room).emit('users', rooms[room].users);
         }
       }
-      io.to(room).emit('users', rooms[room]?.users || []);
-      io.emit('rooms', getRooms());
       ack();
     });
 
