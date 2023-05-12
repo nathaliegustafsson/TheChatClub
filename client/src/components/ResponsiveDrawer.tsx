@@ -16,6 +16,7 @@ import { useSocket } from '../context/SocketContext';
 import ChatWindow from './ChatWindow';
 import RoomsList from './RoomsList';
 // import UserList from './UsersList';
+import RoomUsers from './RoomUsers';
 import background from '/src/assets/gifstar.gif';
 
 const drawerWidth = 280;
@@ -105,6 +106,7 @@ function ResponsiveDrawer(props: Props) {
         </Box>
         <RoomsList rooms={allRooms ?? []} joinRoom={joinRoom} />
         {/* <UserList /> */}
+        <RoomUsers />
       </List>
     </div>
   );
